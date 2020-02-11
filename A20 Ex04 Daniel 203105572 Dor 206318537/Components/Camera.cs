@@ -225,6 +225,7 @@ namespace A20_Ex04_Daniel_203105572_Dor_206318537.Components
                KeyboardState keyboardState = Keyboard.GetState();
 
                float movementScale = 1;
+
                if (keyboardState.IsKeyDown(Keys.LeftShift))
                {
                     movementScale *= 10;

@@ -28,8 +28,13 @@ namespace A20_Ex04_Daniel_203105572_Dor_206318537.Components
           {
           }
 
+          public LoadableDrawableComponent(Game i_Game, int i_CallsOrder)
+              : this(string.Empty, i_Game, i_CallsOrder, i_CallsOrder)
+          {
+          }
+
           public LoadableDrawableComponent(Game i_Game)
-               : this(string.Empty, i_Game, int.MaxValue)
+               : this(i_Game, int.MaxValue)
           {
           }
 
@@ -73,27 +78,6 @@ namespace A20_Ex04_Daniel_203105572_Dor_206318537.Components
                get { return m_AssetName; }
                set { m_AssetName = value; }
           }
-
-          public override void Initialize()
-          {
-               base.Initialize();
-
-               //if (this is ICollidable)
-               //{
-               //     ICollisionsManager collisionMgr =
-               //         this.Game.Services.GetService(typeof(ICollisionsManager))
-               //             as ICollisionsManager;
-
-               //     if (collisionMgr != null)
-               //     {
-               //          collisionMgr.AddObjectToMonitor(this as ICollidable);
-               //     }
-               //}
-
-               InitBounds();
-          }
-
-          protected abstract void InitBounds();
 
           public override void Draw(GameTime gameTime)
           {

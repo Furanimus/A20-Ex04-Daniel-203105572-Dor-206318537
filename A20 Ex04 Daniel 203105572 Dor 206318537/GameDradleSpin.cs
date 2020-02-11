@@ -9,9 +9,6 @@ using System.Collections.Generic;
 
 namespace A20_Ex04_Daniel_203105572_Dor_206318537
 {
-     /// <summary>
-     /// This is the main type for your game.
-     /// </summary>
      public class GameDradleSpin : BaseGame
      {
           private readonly IRandomBehavior r_RandomBehavior;
@@ -21,7 +18,7 @@ namespace A20_Ex04_Daniel_203105572_Dor_206318537
           private VertexPositionColor[] m_Vertices;
           private RasterizerState m_RasterizerState;
           private Camera m_Camera;
-          private Box m_Box;
+          private DradleSpin m_DradleSpin;
 
           public GameDradleSpin()
           {
@@ -34,9 +31,10 @@ namespace A20_Ex04_Daniel_203105572_Dor_206318537
           protected override void Initialize()
           {
                m_Camera = new Camera(this);
-
                m_Camera.Position = new Vector3(0, 0, 20);
                m_Camera.TargetPosition = new Vector3(0, 0, 0);
+
+               m_DradleSpin = new DradleSpin(this, 1);
 
                base.Initialize();
           }
@@ -46,14 +44,11 @@ namespace A20_Ex04_Daniel_203105572_Dor_206318537
                r_SpriteBatch = new SpriteBatch(GraphicsDevice);
                m_BasicEffect = new BasicEffect(this.GraphicsDevice);
                m_BasicEffect.VertexColorEnabled = true;
-               m_Box = new Box(10, 10, 10, this);
                m_RasterizerState = new RasterizerState();
                m_RasterizerState.CullMode = CullMode.CullCounterClockwiseFace;
-               m_Box.BasicEffect = m_BasicEffect;
-          }
+               m_DradleSpin.BasicEffect = m_BasicEffect;
 
-          protected override void UnloadContent()
-          {
+               base.LoadContent();
           }
 
           protected override void Update(GameTime i_GameTime)
@@ -74,14 +69,6 @@ namespace A20_Ex04_Daniel_203105572_Dor_206318537
           protected override void Draw(GameTime gameTime)
           {
                GraphicsDevice.Clear(Color.CornflowerBlue);
-
-               //foreach (EffectPass pass in m_BasicEffect.CurrentTechnique.Passes)
-               //{
-               //     pass.Apply();
-
-               //     this.GraphicsDevice.DrawUserPrimitives<VertexPositionColor>(
-               //         PrimitiveType.TriangleStrip, m_Vertices, 0, 2);
-               //}
 
                base.Draw(gameTime);
           }

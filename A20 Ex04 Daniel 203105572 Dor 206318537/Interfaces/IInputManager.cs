@@ -47,21 +47,3 @@ namespace A20_Ex04_Daniel_203105572_Dor_206318537.Interfaces
           float RightTrigerDelta { get; }
      }
 }
-
-
-
-
-
-
-
-/*
-     pyramid
-                    square: 6 sides ->  
-                               teiva
-      
-     dradle: List<figures> <-- pyramid (location), ....
-      
-      
-      
-      
-      */

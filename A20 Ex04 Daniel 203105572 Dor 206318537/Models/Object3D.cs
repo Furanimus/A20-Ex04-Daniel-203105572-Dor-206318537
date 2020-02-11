@@ -9,11 +9,18 @@ namespace A20_Ex04_Daniel_203105572_Dor_206318537.Models
           protected Matrix m_ModelWorldTransform;
           private readonly Camera r_Camera;
 
-          public Object3D(Game i_Game) 
-               : base(i_Game)
+          public Object3D(Game i_Game, int i_CallOrder)
+               : base(i_Game, i_CallOrder)
           {
                r_Camera = i_Game.Services.GetService(typeof(Camera)) as Camera;
           }
+
+          public Object3D(Game i_Game) 
+               : this(i_Game, int.MaxValue)
+          {
+          }
+
+          public PrimitiveType TriangleDrawType { get; set; }
 
           public Texture2D Texture { get; set; }
 
@@ -45,6 +52,12 @@ namespace A20_Ex04_Daniel_203105572_Dor_206318537.Models
           {
                Position += Velocity * (float)gameTime.ElapsedGameTime.TotalSeconds;
                Rotations += AngularVelocity * (float)gameTime.ElapsedGameTime.TotalSeconds;
+
+               if(r_Camera.ShouldUpdateViewMatrix)
+               {
+                    CameraView = r_Camera.ViewMatrix;
+                    CameraProjection = r_Camera.FieldOfView;
+               }
 
                BuildModelWorldMatrix();
 
