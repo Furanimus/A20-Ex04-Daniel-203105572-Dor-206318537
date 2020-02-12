@@ -19,7 +19,6 @@ namespace A20_Ex04_Daniel_203105572_Dor_206318537.Models
           public Dreidel(Game i_Game, int i_CallOrder)
                : base(i_Game, i_CallOrder)
           {
-               this.Game.Components.Add(this);
                Box box = new Box(k_BoxDimension, k_BoxDimension, k_BoxDimension, this.Game);
                box.IsMultipleColorBox = true;
 
@@ -71,13 +70,13 @@ namespace A20_Ex04_Daniel_203105572_Dor_206318537.Models
                heLetter.Rotations = new Vector3(0, MathHelper.Pi, 0);
                peLetter.Rotations = new Vector3(0, MathHelper.ToRadians(270), 0);
 
-               AddBone(box);
-               AddBone(holder);
-               AddBone(nunLetter);
-               AddBone(gimelLetter);
-               AddBone(heLetter);
-               AddBone(peLetter);
-               AddBone(pyramid);
+               AddComponent(box);
+               AddComponent(holder);
+               AddComponent(nunLetter);
+               AddComponent(gimelLetter);
+               AddComponent(heLetter);
+               AddComponent(peLetter);
+               AddComponent(pyramid);
           }
      }
 }

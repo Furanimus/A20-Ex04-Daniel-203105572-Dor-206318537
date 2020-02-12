@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,9 +9,9 @@ using System.Threading.Tasks;
 
 namespace A20_Ex04_Daniel_203105572_Dor_206318537.Models
 {
-     public class Composite3D : Object3D
+     public class Composite3D : Object3D, ICollection
      {
-          private readonly List<Object3D> r_Bones;
+          private readonly List<Object3D> r_Components;
 
           public Composite3D(Game i_Game)
                : this(i_Game, int.MaxValue, null)
@@ -22,17 +23,25 @@ namespace A20_Ex04_Daniel_203105572_Dor_206318537.Models
           {
           }
 
-          public Composite3D(Game i_Game, int i_CallOrder, params Object3D[] i_Bones)
+          public Composite3D(Game i_Game, int i_CallOrder, params Object3D[] i_Components)
                : base(i_Game, i_CallOrder)
           {
-               r_Bones = new List<Object3D>();
+               r_Components = new List<Object3D>();
 
-               if (i_Bones != null)
+               if (i_Components != null)
                {
-                    foreach(Rectangle3D bone in i_Bones)
+                    foreach(Rectangle3D Component in i_Components)
                     {
-                         AddBone(bone);
+                         AddComponent(Component);
                     }
+               }
+          }
+
+          public Object3D this[int i_Index]
+          {
+               get
+               {
+                    return r_Components[i_Index];
                }
           }
 
@@ -47,9 +56,9 @@ namespace A20_Ex04_Daniel_203105572_Dor_206318537.Models
                {
                     base.TriangleDrawType = value;
 
-                    foreach (Object3D bone in r_Bones)
+                    foreach (Object3D component in r_Components)
                     {
-                         bone.TriangleDrawType = value;
+                         component.TriangleDrawType = value;
                     }
                }
           }
@@ -65,9 +74,9 @@ namespace A20_Ex04_Daniel_203105572_Dor_206318537.Models
                {
                     base.Texture = value;
 
-                    foreach (Object3D bone in r_Bones)
+                    foreach (Object3D component in r_Components)
                     {
-                         bone.Texture = value;
+                         component.Texture = value;
                     }
                }
           }
@@ -83,9 +92,9 @@ namespace A20_Ex04_Daniel_203105572_Dor_206318537.Models
                {
                     base.Position = value;
 
-                    foreach (Object3D bone in r_Bones)
+                    foreach (Object3D component in r_Components)
                     {
-                         bone.Position = value;
+                         component.Position = value;
                     }
                }
           }
@@ -101,9 +110,9 @@ namespace A20_Ex04_Daniel_203105572_Dor_206318537.Models
                {
                     base.Velocity = value;
 
-                    foreach (Object3D bone in r_Bones)
+                    foreach (Object3D component in r_Components)
                     {
-                         bone.Velocity = value;
+                         component.Velocity = value;
                     }
                }
           }
@@ -119,9 +128,9 @@ namespace A20_Ex04_Daniel_203105572_Dor_206318537.Models
                {
                     base.Scales = value;
 
-                    foreach (Object3D bone in r_Bones)
+                    foreach (Object3D component in r_Components)
                     {
-                         bone.Scales = value;
+                         component.Scales = value;
                     }
                }
           }
@@ -137,9 +146,9 @@ namespace A20_Ex04_Daniel_203105572_Dor_206318537.Models
                {
                     base.CameraView = value;
 
-                    foreach (Object3D bone in r_Bones)
+                    foreach (Object3D component in r_Components)
                     {
-                         bone.CameraView = value;
+                         component.CameraView = value;
                     }
                }
           }
@@ -155,9 +164,9 @@ namespace A20_Ex04_Daniel_203105572_Dor_206318537.Models
                {
                     base.CameraProjection = value;
 
-                    foreach (Object3D bone in r_Bones)
+                    foreach (Object3D component in r_Components)
                     {
-                         bone.CameraProjection = value;
+                         component.CameraProjection = value;
                     }
                }
           }
@@ -173,9 +182,9 @@ namespace A20_Ex04_Daniel_203105572_Dor_206318537.Models
                {
                     base.BasicEffect = value;
 
-                    foreach (Object3D bone in r_Bones)
+                    foreach (Object3D component in r_Components)
                     {
-                         bone.BasicEffect = value;
+                         component.BasicEffect = value;
                     }
                }
           }
@@ -191,9 +200,9 @@ namespace A20_Ex04_Daniel_203105572_Dor_206318537.Models
                {
                     base.AngularVelocity = value;
 
-                    foreach(Object3D bone in r_Bones)
+                    foreach(Object3D component in r_Components)
                     {
-                         bone.AngularVelocity = value;
+                         component.AngularVelocity = value;
                     }
                }
           }
@@ -208,23 +217,24 @@ namespace A20_Ex04_Daniel_203105572_Dor_206318537.Models
                {
                     base.Rotations = value;
 
-                    foreach (Object3D bone in r_Bones)
+                    foreach (Object3D component in r_Components)
                     {
-                         bone.Rotations += value;
+                         component.Rotations += value;
                     }
                }
           }
 
-          public void AddBone(Object3D i_Bone)
+
+          public void AddComponent(Object3D i_Component)
           {
-               r_Bones.Add(i_Bone);
+               r_Components.Add(i_Component);
           }
 
           public override void Initialize()
           {
-               foreach(Object3D bone in r_Bones)
+               foreach(Object3D component in r_Components)
                {
-                    bone.Initialize();
+                    component.Initialize();
                }
                
                base.Initialize();
@@ -234,25 +244,42 @@ namespace A20_Ex04_Daniel_203105572_Dor_206318537.Models
           {
                if(r_Camera.ShouldUpdateViewMatrix)
                {
-                    foreach (Object3D bone in r_Bones)
+                    foreach (Object3D component in r_Components)
                     {
-                         bone.CameraView = r_Camera.ViewMatrix;
-                         bone.CameraProjection = r_Camera.FieldOfView;
+                         component.CameraView = r_Camera.ViewMatrix;
+                         component.CameraProjection = r_Camera.FieldOfView;
                     }
                }
 
-               foreach (Object3D bone in r_Bones)
+               foreach (Object3D component in r_Components)
                {
-                    bone.Update(i_GameTime);
+                    component.Update(i_GameTime);
                }
           }
 
           protected override void OnDraw(GameTime i_GameTime)
           {
-               foreach (Object3D bone in r_Bones)
+               foreach (Object3D component in r_Components)
                {
-                    bone.Draw(i_GameTime);
+                    component.Draw(i_GameTime);
                }
+          }
+
+          public int Count => r_Components.Count;
+
+          public object SyncRoot => null;
+
+          public bool IsSynchronized => false;
+
+
+          public void CopyTo(Array i_Array, int i_Index)
+          {
+               r_Components.CopyTo(i_Array as Object3D[], i_Index);
+          }
+
+          public IEnumerator GetEnumerator()
+          {
+               return r_Components.GetEnumerator();
           }
      }
 }

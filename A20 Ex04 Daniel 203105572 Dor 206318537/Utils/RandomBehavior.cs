@@ -81,9 +81,9 @@ namespace A20_Ex04_Daniel_203105572_Dor_206318537.Utils
           {
                float x, y, z;
 
-               x = GetRandomNumber(-15, 15);
-               y = GetRandomNumber(-15, 10);
-               z = GetRandomNumber(-50, 0);
+               x = GetRandomNumber(-30, 30);
+               y = GetRandomNumber(-15, 15);
+               z = GetRandomNumber(-50, 10);
 
                return new Vector3(x, y, z);
           }
