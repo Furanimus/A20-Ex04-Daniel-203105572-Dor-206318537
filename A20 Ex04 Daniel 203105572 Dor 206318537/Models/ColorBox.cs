@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace A20_Ex04_Daniel_203105572_Dor_206318537.Models
 {
-     public class Box : Object3D
+     public class ColorBox : Object3D
      {
           private const int k_TListSize                                       = 24;
           private const int k_TStripVerticesOneColorCount                     = 18;
@@ -24,12 +24,14 @@ namespace A20_Ex04_Daniel_203105572_Dor_206318537.Models
           private const int k_VerticesInOneFace                               = 4;
           private const int k_TrianglesInOneFace                              = 2;
           private const int k_FacesInCube                                     = 6;
+          protected readonly List<VertexPositionColor> r_TListVertices = new List<VertexPositionColor>();
+          protected readonly List<VertexPositionColor> r_TStripVertices = new List<VertexPositionColor>();
           private readonly List<VertexPositionColor> r_TStripVerticesMulColor = new List<VertexPositionColor>(k_TStripVerticesMulColorCount);
           private PrimitiveType m_TriangleDrawType                            = PrimitiveType.TriangleStrip;
           private bool m_IsMultipleColorBox;
           private bool m_IsMulColorBoxInitialzied;
 
-          public Box(float i_Width, float i_Height, float i_Depth, Game i_Game, int i_CallOrder)
+          public ColorBox(float i_Width, float i_Height, float i_Depth, Game i_Game, int i_CallOrder)
                : base(i_Game, i_CallOrder)
           {
                Width = i_Width;
@@ -39,7 +41,7 @@ namespace A20_Ex04_Daniel_203105572_Dor_206318537.Models
                r_TStripVertices.Capacity = k_TStripVerticesOneColorCount;
           }
 
-          public Box(float i_Width, float i_Height, float i_Depth, Game i_Game)
+          public ColorBox(float i_Width, float i_Height, float i_Depth, Game i_Game)
                : this(i_Width, i_Height, i_Depth, i_Game, int.MaxValue)
           {
           }
@@ -154,30 +156,30 @@ namespace A20_Ex04_Daniel_203105572_Dor_206318537.Models
                r_TStripVerticesMulColor.Add(new VertexPositionColor(new Vector3(distanceX + ModelCenter.X, -distanceY + ModelCenter.Y, distanceZ + ModelCenter.Z), FrontFaceColor));
                r_TStripVerticesMulColor.Add(new VertexPositionColor(new Vector3(distanceX + ModelCenter.X, distanceY + ModelCenter.Y, distanceZ + ModelCenter.Z), FrontFaceColor));
 
-               r_TStripVerticesMulColor.Add(new VertexPositionColor(new Vector3(distanceX + ModelCenter.X, -distanceY + ModelCenter.Y, distanceZ + ModelCenter.Z), RightFaceColor));
-               r_TStripVerticesMulColor.Add(new VertexPositionColor(new Vector3(distanceX + ModelCenter.X, distanceY + ModelCenter.Y, distanceZ + ModelCenter.Z), RightFaceColor));
+               r_TStripVerticesMulColor.Add(new VertexPositionColor(r_TStripVerticesMulColor[2].Position, RightFaceColor));
+               r_TStripVerticesMulColor.Add(new VertexPositionColor(r_TStripVerticesMulColor[3].Position, RightFaceColor));
                r_TStripVerticesMulColor.Add(new VertexPositionColor(new Vector3(distanceX + ModelCenter.X, -distanceY + ModelCenter.Y, -distanceZ + ModelCenter.Z), RightFaceColor));
                r_TStripVerticesMulColor.Add(new VertexPositionColor(new Vector3(distanceX + ModelCenter.X, distanceY + ModelCenter.Y, -distanceZ + ModelCenter.Z), RightFaceColor));
 
-               r_TStripVerticesMulColor.Add(new VertexPositionColor(new Vector3(distanceX + ModelCenter.X, -distanceY + ModelCenter.Y, -distanceZ + ModelCenter.Z), BackFaceColor));
-               r_TStripVerticesMulColor.Add(new VertexPositionColor(new Vector3(distanceX + ModelCenter.X, distanceY + ModelCenter.Y, -distanceZ + ModelCenter.Z), BackFaceColor));
+               r_TStripVerticesMulColor.Add(new VertexPositionColor(r_TStripVerticesMulColor[6].Position, BackFaceColor));
+               r_TStripVerticesMulColor.Add(new VertexPositionColor(r_TStripVerticesMulColor[7].Position, BackFaceColor));
                r_TStripVerticesMulColor.Add(new VertexPositionColor(new Vector3(-distanceX + ModelCenter.X, -distanceY + ModelCenter.Y, -distanceZ + ModelCenter.Z), BackFaceColor));
                r_TStripVerticesMulColor.Add(new VertexPositionColor(new Vector3(-distanceX + ModelCenter.X, distanceY + ModelCenter.Y, -distanceZ + ModelCenter.Z), BackFaceColor));
 
-               r_TStripVerticesMulColor.Add(new VertexPositionColor(new Vector3(-distanceX + ModelCenter.X, -distanceY + ModelCenter.Y, -distanceZ + ModelCenter.Z), LeftFaceColor));
-               r_TStripVerticesMulColor.Add(new VertexPositionColor(new Vector3(-distanceX + ModelCenter.X, distanceY + ModelCenter.Y, -distanceZ + ModelCenter.Z), LeftFaceColor));
+               r_TStripVerticesMulColor.Add(new VertexPositionColor(r_TStripVerticesMulColor[10].Position, LeftFaceColor));
+               r_TStripVerticesMulColor.Add(new VertexPositionColor(r_TStripVerticesMulColor[11].Position, LeftFaceColor));
                r_TStripVerticesMulColor.Add(new VertexPositionColor(new Vector3(-distanceX + ModelCenter.X, -distanceY + ModelCenter.Y, distanceZ + ModelCenter.Z), LeftFaceColor));
                r_TStripVerticesMulColor.Add(new VertexPositionColor(new Vector3(-distanceX + ModelCenter.X, distanceY + ModelCenter.Y, distanceZ + ModelCenter.Z), LeftFaceColor));
 
-               r_TStripVerticesMulColor.Add(new VertexPositionColor(new Vector3(-distanceX + ModelCenter.X, distanceY + ModelCenter.Y, distanceZ + ModelCenter.Z), TopFaceColor));
-               r_TStripVerticesMulColor.Add(new VertexPositionColor(new Vector3(-distanceX + ModelCenter.X, distanceY + ModelCenter.Y, -distanceZ + ModelCenter.Z), TopFaceColor));
-               r_TStripVerticesMulColor.Add(new VertexPositionColor(new Vector3(distanceX + ModelCenter.X, distanceY + ModelCenter.Y, distanceZ + ModelCenter.Z), TopFaceColor));
-               r_TStripVerticesMulColor.Add(new VertexPositionColor(new Vector3(distanceX + ModelCenter.X, distanceY + ModelCenter.Y, -distanceZ + ModelCenter.Z), TopFaceColor));
+               r_TStripVerticesMulColor.Add(new VertexPositionColor(r_TStripVerticesMulColor[0].Position, TopFaceColor));
+               r_TStripVerticesMulColor.Add(new VertexPositionColor(r_TStripVerticesMulColor[10].Position, TopFaceColor));
+               r_TStripVerticesMulColor.Add(new VertexPositionColor(r_TStripVerticesMulColor[2].Position, TopFaceColor));
+               r_TStripVerticesMulColor.Add(new VertexPositionColor(r_TStripVerticesMulColor[6].Position, TopFaceColor));
 
-               r_TStripVerticesMulColor.Add(new VertexPositionColor(new Vector3(-distanceX + ModelCenter.X, -distanceY + ModelCenter.Y, -distanceZ + ModelCenter.Z), BottomFaceColor));
-               r_TStripVerticesMulColor.Add(new VertexPositionColor(new Vector3(-distanceX + ModelCenter.X, -distanceY + ModelCenter.Y, distanceZ + ModelCenter.Z), BottomFaceColor));
-               r_TStripVerticesMulColor.Add(new VertexPositionColor(new Vector3(distanceX + ModelCenter.X, -distanceY + ModelCenter.Y, -distanceZ + ModelCenter.Z), BottomFaceColor));
-               r_TStripVerticesMulColor.Add(new VertexPositionColor(new Vector3(distanceX + ModelCenter.X, -distanceY + ModelCenter.Y, distanceZ + ModelCenter.Z), BottomFaceColor));
+               r_TStripVerticesMulColor.Add(new VertexPositionColor(r_TStripVerticesMulColor[1].Position, BottomFaceColor));
+               r_TStripVerticesMulColor.Add(new VertexPositionColor(r_TStripVerticesMulColor[11].Position, BottomFaceColor));
+               r_TStripVerticesMulColor.Add(new VertexPositionColor(r_TStripVerticesMulColor[3].Position, BottomFaceColor));
+               r_TStripVerticesMulColor.Add(new VertexPositionColor(r_TStripVerticesMulColor[7].Position, BottomFaceColor));
           }
 
           public Color FrontFaceColor { get; set; } = Color.Yellow;

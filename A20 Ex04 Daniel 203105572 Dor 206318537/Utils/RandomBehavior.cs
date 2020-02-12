@@ -7,6 +7,15 @@ namespace A20_Ex04_Daniel_203105572_Dor_206318537.Utils
 {
      public class RandomBehavior : GameService, IRandomBehavior
      {
+          private const int k_MaxAngularVelocity = 15;
+          private const int k_MinAngularVelocity = 8;
+          private const int k_XHighestThreshold = 30;
+          private const int k_XLowestThreshold = -30;
+          private const int k_YHighestThreshold = 12;
+          private const int k_YLowestThreshold = -15;
+          private const int k_ZHighestThreshold = 10;
+          private const int k_ZLowestThreshold = -50;
+
           private readonly Random r_Random;
           private readonly int r_RandomFactor = 10;
           private readonly int r_RandomMin = 0;
@@ -23,7 +32,7 @@ namespace A20_Ex04_Daniel_203105572_Dor_206318537.Utils
                this.Game.Services.AddService(typeof(IRandomBehavior), this);
           }
 
-          public RandomBehavior(int i_RandomFactor, int i_RandomMin, int i_RandomMax, Game i_Game)
+          public RandomBehavior(Game i_Game, int i_RandomFactor = 10, int i_RandomMin = 0, int i_RandomMax = 5000)
                : base(i_Game)
           {
                r_Random = new Random();
@@ -77,15 +86,28 @@ namespace A20_Ex04_Daniel_203105572_Dor_206318537.Utils
                return new TimeSpan(0, 0, new Random().Next(i_SecondsMaxVal));
           }
 
-          public Vector3 generateRandomVector3()
+          public Vector3 GenerateRandomVector3()
           {
-               float x, y, z;
+               return new Vector3(
+                    GetRandomNumber(k_XLowestThreshold, k_XHighestThreshold),
+                    GetRandomNumber(k_YLowestThreshold, k_YHighestThreshold),
+                    GetRandomNumber(k_ZLowestThreshold, k_ZHighestThreshold)
+                    );
+          }
 
-               x = GetRandomNumber(-30, 30);
-               y = GetRandomNumber(-15, 15);
-               z = GetRandomNumber(-50, 10);
+          public Vector3 GenerateRandomAngularVelocityX()
+          {
+               return new Vector3(GetRandomNumber(k_MinAngularVelocity, k_MaxAngularVelocity), 0, 0);
+          }
 
-               return new Vector3(x, y, z);
+          public Vector3 GenerateRandomAngularVelocityY()
+          {
+               return new Vector3(0, GetRandomNumber(k_MinAngularVelocity, k_MaxAngularVelocity), 0);
+          }
+
+          public Vector3 GenerateRandomAngularVelocityZ()
+          {
+               return new Vector3(0, 0, GetRandomNumber(k_MinAngularVelocity, k_MaxAngularVelocity));
           }
      }
 }

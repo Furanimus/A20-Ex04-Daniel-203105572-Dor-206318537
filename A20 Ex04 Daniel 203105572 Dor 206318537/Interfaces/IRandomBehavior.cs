@@ -23,6 +23,12 @@ namespace A20_Ex04_Daniel_203105572_Dor_206318537.Interfaces
 
           TimeSpan GetRandomIntervalSeconds(int i_SecondsMaxVal);
 
-          Vector3 generateRandomVector3();
+          Vector3 GenerateRandomVector3();
+
+          Vector3 GenerateRandomAngularVelocityX();
+
+          Vector3 GenerateRandomAngularVelocityY();
+
+          Vector3 GenerateRandomAngularVelocityZ();
      }
 }

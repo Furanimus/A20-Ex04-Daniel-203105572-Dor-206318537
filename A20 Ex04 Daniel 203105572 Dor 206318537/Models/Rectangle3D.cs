@@ -10,6 +10,8 @@ namespace A20_Ex04_Daniel_203105572_Dor_206318537.Models
 {
      public class Rectangle3D : Object3D
      {
+          protected readonly List<VertexPositionColor> r_TListVertices = new List<VertexPositionColor>();
+          protected readonly List<VertexPositionColor> r_TStripVertices = new List<VertexPositionColor>();
           private const int k_TListCapacity = 6;
           private const int k_TStripCapacity = 4;
           private PrimitiveType m_TriangleDrawType;

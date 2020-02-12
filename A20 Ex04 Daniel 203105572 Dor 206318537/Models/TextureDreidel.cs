@@ -1,26 +1,28 @@
 ﻿using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
+using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace A20_Ex04_Daniel_203105572_Dor_206318537.Models
 {
-     public class Dreidel : Composite3D
+     public class TextureDreidel : Composite3D
      {
-          private const float k_BoxDimension           = 5;
-          private const float k_HolderDimension        = 1;
-          private const float k_HolderHeight           = 4;
+          private const float k_BoxDimension = 5;
+          private const float k_HolderDimension = 1;
+          private const float k_HolderHeight = 4;
           private readonly Vector3 r_HolderModelCenter = new Vector3(0, 2.5f, 0);
 
-          public Dreidel(Game i_Game) 
+          public TextureDreidel(Game i_Game)
                : this(i_Game, int.MaxValue)
           {
           }
 
-          public Dreidel(Game i_Game, int i_CallOrder)
+          public TextureDreidel(Game i_Game, int i_CallOrder)
                : base(i_Game, i_CallOrder)
           {
-               ColorBox box = new ColorBox(k_BoxDimension, k_BoxDimension, k_BoxDimension, this.Game);
-               box.IsMultipleColorBox = true;
+               TextureBox box = new TextureBox(this.Game, @"Sprites\NGHP");
 
                ColorBox holder = new ColorBox(k_HolderDimension, k_HolderHeight, k_HolderDimension, this.Game);
                holder.ModelCenter = r_HolderModelCenter;
@@ -78,7 +80,5 @@ namespace A20_Ex04_Daniel_203105572_Dor_206318537.Models
                AddComponent(peLetter);
                AddComponent(pyramid);
           }
-
-          public bool IsIdle { get; set; }
      }
 }

@@ -1,11 +1,11 @@
-﻿using A20_Ex04_Daniel_203105572_Dor_206318537.Components;
+﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
+using A20_Ex04_Daniel_203105572_Dor_206318537.Components;
 using A20_Ex04_Daniel_203105572_Dor_206318537.Interfaces;
 using A20_Ex04_Daniel_203105572_Dor_206318537.Managers;
 using A20_Ex04_Daniel_203105572_Dor_206318537.Models;
 using A20_Ex04_Daniel_203105572_Dor_206318537.Utils;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Input;
 using System.Collections.Generic;
 
 namespace A20_Ex04_Daniel_203105572_Dor_206318537
@@ -35,36 +35,30 @@ namespace A20_Ex04_Daniel_203105572_Dor_206318537
           {
                Camera.Position = new Vector3(0, 0, 50);
                Camera.TargetPosition = new Vector3(0, 0, 0);
-               
+
                World.AddComponent(new Dreidel(this, 1));
-               World[0].Position = r_RandomBehavior.generateRandomVector3();
-               World[0].AngularVelocity = new Vector3(0, 1f, 0);
+               World[0].Position = r_RandomBehavior.GenerateRandomVector3();
                World[0].TriangleDrawType = PrimitiveType.TriangleList;
 
                World.AddComponent(new Dreidel(this, 1));
-               World[1].Position = r_RandomBehavior.generateRandomVector3();
-               World[1].AngularVelocity = new Vector3(0, 1f, 0);
+               World[1].Position = r_RandomBehavior.GenerateRandomVector3();
                World[1].TriangleDrawType = PrimitiveType.TriangleList;
 
 
                World.AddComponent(new Dreidel(this, 1));
-               World[2].Position = r_RandomBehavior.generateRandomVector3();
-               World[2].AngularVelocity = new Vector3(0, 1f, 0);
+               World[2].Position = r_RandomBehavior.GenerateRandomVector3();
                World[2].TriangleDrawType = PrimitiveType.TriangleStrip;
 
                World.AddComponent(new Dreidel(this, 1));
-               World[3].Position = r_RandomBehavior.generateRandomVector3();
-               World[3].AngularVelocity = new Vector3(0, 1f, 0);
+               World[3].Position = r_RandomBehavior.GenerateRandomVector3();
                World[3].TriangleDrawType = PrimitiveType.TriangleStrip;
 
                World.AddComponent(new Dreidel(this, 1));
-               World[4].Position = r_RandomBehavior.generateRandomVector3();
-               World[4].AngularVelocity = new Vector3(0, 1f, 0);
+               World[4].Position = r_RandomBehavior.GenerateRandomVector3();
                World[4].TriangleDrawType = PrimitiveType.TriangleStrip;
 
                World.AddComponent(new Dreidel(this, 1));
-               World[5].Position = r_RandomBehavior.generateRandomVector3();
-               World[5].AngularVelocity = new Vector3(0, 1f, 0);
+               World[5].Position = r_RandomBehavior.GenerateRandomVector3();
                World[5].TriangleDrawType = PrimitiveType.TriangleStrip;
 
                base.Initialize();
@@ -78,11 +72,10 @@ namespace A20_Ex04_Daniel_203105572_Dor_206318537
                m_RasterizerState = new RasterizerState();
                m_RasterizerState.CullMode = CullMode.CullCounterClockwiseFace;
 
-               foreach(Object3D dreidel in World)
+               foreach (Object3D dreidel in World)
                {
                     dreidel.BasicEffect = m_BasicEffect;
                }
-
 
                base.LoadContent();
           }

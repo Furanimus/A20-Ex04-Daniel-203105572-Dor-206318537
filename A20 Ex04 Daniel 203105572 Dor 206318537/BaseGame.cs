@@ -46,7 +46,7 @@ namespace A20_Ex04_Daniel_203105572_Dor_206318537.Utils
 
           protected SpriteBatch SpriteBatch { get; set; }
 
-          protected Composite3D World { get; set; }
+          public Composite3D World { get; set; }
 
           public ICamera Camera { get; set; } 
      }

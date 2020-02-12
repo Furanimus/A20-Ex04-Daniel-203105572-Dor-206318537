@@ -10,6 +10,8 @@ namespace A20_Ex04_Daniel_203105572_Dor_206318537.Models
 {
      public class Pyramid : Object3D
      {
+          protected readonly List<VertexPositionColor> r_TListVertices = new List<VertexPositionColor>();
+          protected readonly List<VertexPositionColor> r_TStripVertices = new List<VertexPositionColor>();
           private PrimitiveType m_TriangleDrawType = PrimitiveType.TriangleStrip;
 
           public Pyramid (float i_Width, float i_Height, float i_PyramidVertical, Game i_Game, int i_CallOrder)
@@ -66,9 +68,14 @@ namespace A20_Ex04_Daniel_203105572_Dor_206318537.Models
                if(IsYFlip)
                {
                     flipPyramid(1, -1, 1);
+
+                    if (TriangleDrawType == PrimitiveType.TriangleList)
+                    {
+                         flipPyramid(1, 1, -1);
+                    }
                }
 
-               if(IsXFlip)
+               if (IsXFlip)
                {
                     flipPyramid(-1, 1, 1);
                }

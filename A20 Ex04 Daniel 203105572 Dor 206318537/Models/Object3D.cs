@@ -8,8 +8,6 @@ namespace A20_Ex04_Daniel_203105572_Dor_206318537.Models
 {
      public abstract class Object3D : DrawableGameComponent
      {
-          protected readonly List<VertexPositionColor> r_TListVertices = new List<VertexPositionColor>();
-          protected readonly List<VertexPositionColor> r_TStripVertices = new List<VertexPositionColor>();
           protected readonly Camera r_Camera;
           protected Matrix m_ModelWorldTransform;
 

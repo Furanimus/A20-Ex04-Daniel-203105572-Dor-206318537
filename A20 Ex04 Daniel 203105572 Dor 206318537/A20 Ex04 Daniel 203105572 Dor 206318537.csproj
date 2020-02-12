@@ -54,10 +54,12 @@
     <Compile Include="Managers\InputManager.cs" />
     <Compile Include="Models\Dreidel.cs" />
     <Compile Include="Models\Composite3D.cs" />
-    <Compile Include="Models\Box.cs" />
+    <Compile Include="Models\ColorBox.cs" />
     <Compile Include="Models\Object3D.cs" />
     <Compile Include="Models\Pyramid.cs" />
     <Compile Include="Models\Rectangle3D.cs" />
+    <Compile Include="Models\TextureBox.cs" />
+    <Compile Include="Models\TextureDreidel.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="BaseGame.cs" />
