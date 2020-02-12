@@ -118,11 +118,11 @@ namespace A20_Ex04_Daniel_203105572_Dor_206318537.Models
 
           private void initOneColorTStripVertices()
           {
-               float distanceX = Width / 2;
-               float distanceY = Height / 2;
-               float distanceZ = Depth / 2;
+               float distanceFromX = Width / 2;
+               float distanceFromY = Height / 2;
+               float distanceFromZ = Depth / 2;
 
-               initOneColorBoxSideFacesVertices(distanceX, distanceY, distanceZ);
+               initOneColorBoxSideFacesVertices(distanceFromX, distanceFromY, distanceFromZ);
                initOneColorBoxTopFace();
                initOneColorBoxBottomFace();
           }

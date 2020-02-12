@@ -53,6 +53,7 @@
     <Compile Include="Managers\CameraManager.cs" />
     <Compile Include="Managers\InputManager.cs" />
     <Compile Include="Models\DradleSpin.cs" />
+    <Compile Include="Models\Letter3D.cs" />
     <Compile Include="Models\Model3D.cs" />
     <Compile Include="Models\Box.cs" />
     <Compile Include="Models\Object3D.cs" />

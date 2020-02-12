@@ -35,6 +35,7 @@ namespace A20_Ex04_Daniel_203105572_Dor_206318537
                m_Camera.TargetPosition = new Vector3(0, 0, 0);
 
                m_DradleSpin = new DradleSpin(this, 1);
+               m_DradleSpin.Position = new Vector3(2, 2, -20);
 
                base.Initialize();
           }
