@@ -220,23 +220,39 @@ namespace A20_Ex04_Daniel_203105572_Dor_206318537.Models
                r_Bones.Add(i_Bone);
           }
 
+          public override void Initialize()
+          {
+               foreach(Object3D bone in r_Bones)
+               {
+                    bone.Initialize();
+               }
+               
+               base.Initialize();
+          }
+
           protected override void OnUpdate(GameTime i_GameTime)
           {
+               if(r_Camera.ShouldUpdateViewMatrix)
+               {
+                    foreach (Object3D bone in r_Bones)
+                    {
+                         bone.CameraView = r_Camera.ViewMatrix;
+                         bone.CameraProjection = r_Camera.FieldOfView;
+                    }
+               }
+
+               foreach (Object3D bone in r_Bones)
+               {
+                    bone.Update(i_GameTime);
+               }
           }
 
           protected override void OnDraw(GameTime i_GameTime)
           {
-          }
-
-          protected override void Camera_OnPositionChanged(object i_Sender, EventArgs i_Args)
-          {
-               foreach(Object3D bone in r_Bones)
+               foreach (Object3D bone in r_Bones)
                {
-                    bone.CameraProjection = r_Camera.FieldOfView;
-                    bone.CameraView = r_Camera.ViewMatrix;
+                    bone.Draw(i_GameTime);
                }
-
-               base.Camera_OnPositionChanged(i_Sender, i_Args);
           }
      }
 }

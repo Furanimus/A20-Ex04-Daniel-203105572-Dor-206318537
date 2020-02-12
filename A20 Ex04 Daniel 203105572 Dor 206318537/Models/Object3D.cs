@@ -6,17 +6,24 @@ using System;
 
 namespace A20_Ex04_Daniel_203105572_Dor_206318537.Models
 {
-     public abstract class Object3D : LoadableDrawableComponent
+     public abstract class Object3D : DrawableGameComponent
      {
           protected readonly List<VertexPositionColor> r_TListVertices = new List<VertexPositionColor>();
           protected readonly List<VertexPositionColor> r_TStripVertices = new List<VertexPositionColor>();
           protected readonly Camera r_Camera;
           protected Matrix m_ModelWorldTransform;
 
-          public Object3D(Game i_Game, int i_CallOrder)
-               : base(i_Game, i_CallOrder)
+          public Object3D(Game i_Game, int i_UpdateOrder, int i_DrawOrder)
+               : base(i_Game)
           {
+               this.UpdateOrder = i_UpdateOrder;
+               this.DrawOrder = i_DrawOrder;
                r_Camera = i_Game.Services.GetService(typeof(Camera)) as Camera;
+          }
+
+          public Object3D(Game i_Game, int i_CallOrder)
+               : this(i_Game, i_CallOrder, i_CallOrder)
+          {
           }
 
           public Object3D(Game i_Game) 
@@ -52,19 +59,20 @@ namespace A20_Ex04_Daniel_203105572_Dor_206318537.Models
           {
                CameraView = r_Camera.ViewMatrix;
                CameraProjection = r_Camera.FieldOfView;
-               r_Camera.OnPositionChanged += Camera_OnPositionChanged;
 
                base.Initialize();
-          }
-
-          protected virtual void Camera_OnPositionChanged(object i_Sender, EventArgs i_Args)
-          {
-               r_Camera.ShouldUpdateViewMatrix = false;
           }
 
           public override void Update(GameTime i_GameTime)
           {
                OnUpdate(i_GameTime);
+
+               if(r_Camera.ShouldUpdateViewMatrix)
+               {
+                    CameraView = r_Camera.ViewMatrix;
+                    CameraProjection = r_Camera.FieldOfView;
+               }
+
                BuildModelWorldMatrix();
 
                base.Update(i_GameTime);

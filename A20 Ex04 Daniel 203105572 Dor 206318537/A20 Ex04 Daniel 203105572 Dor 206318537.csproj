@@ -44,7 +44,6 @@
     <Compile Include="Components\Camera.cs" />
     <Compile Include="Components\GameService.cs" />
     <Compile Include="Interfaces\ICamera.cs" />
-    <Compile Include="Components\LoadableDrawableComponent.cs" />
     <Compile Include="Components\RegisteredComponent.cs" />
     <Compile Include="Enums\eInputButtons.cs" />
     <Compile Include="GameDradleSpin.cs" />

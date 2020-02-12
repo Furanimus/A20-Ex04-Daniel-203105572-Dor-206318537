@@ -38,7 +38,7 @@ namespace A20_Ex04_Daniel_203105572_Dor_206318537
                m_DradleSpin.Position = new Vector3(0, -2, -10);
                m_DradleSpin.Rotations = new Vector3(0.1f, 0, 0);
                m_DradleSpin.AngularVelocity = new Vector3(0, 0.5f, 0);
-               m_DradleSpin.TriangleDrawType = PrimitiveType.TriangleStrip;
+               m_DradleSpin.TriangleDrawType = PrimitiveType.TriangleList;
 
                base.Initialize();
           }

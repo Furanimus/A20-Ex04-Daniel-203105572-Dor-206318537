@@ -106,18 +106,25 @@ namespace A20_Ex04_Daniel_203105572_Dor_206318537.Models
                float distanceFromY = Vertical;
                float distanceFromZ = Height / 2;
 
-               r_TStripVertices.Add(new VertexPositionColor(new Vector3(-distanceFromX + ModelCenter.X, 0 + ModelCenter.Y, distanceFromZ + ModelCenter.Z), Color));
-               r_TStripVertices.Add(new VertexPositionColor(new Vector3(0 + ModelCenter.X, distanceFromY + ModelCenter.Y, 0 + ModelCenter.Z), Color));
-               r_TStripVertices.Add(new VertexPositionColor(new Vector3(distanceFromX + ModelCenter.X, 0 + ModelCenter.Y, distanceFromZ + ModelCenter.Z), Color));
-               r_TStripVertices.Add(r_TStripVertices[2]);
-               r_TStripVertices.Add(r_TStripVertices[1]);
-               r_TStripVertices.Add(new VertexPositionColor(new Vector3(distanceFromX + ModelCenter.X, 0 + ModelCenter.Y, -distanceFromZ + ModelCenter.Z), Color));
-               r_TStripVertices.Add(r_TStripVertices[5]);
-               r_TStripVertices.Add(r_TStripVertices[1]);
-               r_TStripVertices.Add(new VertexPositionColor(new Vector3(-distanceFromX + ModelCenter.X, 0 + ModelCenter.Y, -distanceFromZ + ModelCenter.Z), Color));
-               r_TStripVertices.Add(r_TStripVertices[8]);
-               r_TStripVertices.Add(r_TStripVertices[1]);
-               r_TStripVertices.Add(r_TStripVertices[0]);
+               r_TListVertices.Add(new VertexPositionColor(new Vector3(-distanceFromX + ModelCenter.X, 0 + ModelCenter.Y, distanceFromZ + ModelCenter.Z), Color));
+               r_TListVertices.Add(new VertexPositionColor(new Vector3(0 + ModelCenter.X, distanceFromY + ModelCenter.Y, 0 + ModelCenter.Z), Color));
+               r_TListVertices.Add(new VertexPositionColor(new Vector3(distanceFromX + ModelCenter.X, 0 + ModelCenter.Y, distanceFromZ + ModelCenter.Z), Color));
+               r_TListVertices.Add(r_TListVertices[2]);
+               r_TListVertices.Add(r_TListVertices[1]);
+               r_TListVertices.Add(new VertexPositionColor(new Vector3(distanceFromX + ModelCenter.X, 0 + ModelCenter.Y, -distanceFromZ + ModelCenter.Z), Color));
+               r_TListVertices.Add(r_TListVertices[5]);
+               r_TListVertices.Add(r_TListVertices[1]);
+               r_TListVertices.Add(new VertexPositionColor(new Vector3(-distanceFromX + ModelCenter.X, 0 + ModelCenter.Y, -distanceFromZ + ModelCenter.Z), Color));
+               r_TListVertices.Add(r_TListVertices[8]);
+               r_TListVertices.Add(r_TListVertices[1]);
+               r_TListVertices.Add(r_TListVertices[0]);
+               r_TListVertices.Add(r_TListVertices[0]);
+               r_TListVertices.Add(r_TListVertices[8]);
+               r_TListVertices.Add(r_TListVertices[2]);
+               r_TListVertices.Add(r_TListVertices[2]);
+               r_TListVertices.Add(r_TListVertices[8]);
+               r_TListVertices.Add(r_TListVertices[5]);
+
           }
 
           public bool IsXFlip { get; set; }
