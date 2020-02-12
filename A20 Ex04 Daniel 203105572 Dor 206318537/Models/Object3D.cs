@@ -1,13 +1,17 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using A20_Ex04_Daniel_203105572_Dor_206318537.Components;
+using System.Collections.Generic;
+using System;
 
 namespace A20_Ex04_Daniel_203105572_Dor_206318537.Models
 {
      public abstract class Object3D : LoadableDrawableComponent
      {
+          protected readonly List<VertexPositionColor> r_TListVertices = new List<VertexPositionColor>();
+          protected readonly List<VertexPositionColor> r_TStripVertices = new List<VertexPositionColor>();
+          protected readonly Camera r_Camera;
           protected Matrix m_ModelWorldTransform;
-          private readonly Camera r_Camera;
 
           public Object3D(Game i_Game, int i_CallOrder)
                : base(i_Game, i_CallOrder)
@@ -20,48 +24,56 @@ namespace A20_Ex04_Daniel_203105572_Dor_206318537.Models
           {
           }
 
-          public PrimitiveType TriangleDrawType { get; set; }
+          public Vector3 ModelCenter { get; set; }
 
-          public Texture2D Texture { get; set; }
+          public virtual PrimitiveType TriangleDrawType { get; set; } = PrimitiveType.TriangleStrip;
 
-          public Vector3 Position { get; set; }
+          public virtual Texture2D Texture { get; set; }
 
-          public Vector3 Velocity { get; set; }
+          public virtual Vector3 Position { get; set; }
 
-          public Vector3 Rotations { get; set; }
+          public Color Color { get; set; } = Color.Black;
 
-          public Vector3 AngularVelocity { get; set; }
+          public virtual Vector3 Velocity { get; set; }
 
-          public Vector3 Scales { get; set; } = Vector3.One;
+          public virtual Vector3 Rotations { get; set; }
 
-          public Matrix CameraView { get; set; }
+          public virtual Vector3 AngularVelocity { get; set; }
 
-          public Matrix CameraProjection { get; set; }
+          public virtual Vector3 Scales { get; set; } = Vector3.One;
 
-          public BasicEffect BasicEffect { get; set; }
+          public virtual Matrix CameraView { get; set; }
+
+          public virtual Matrix CameraProjection { get; set; }
+
+          public virtual BasicEffect BasicEffect { get; set; }
 
           public override void Initialize()
           {
                CameraView = r_Camera.ViewMatrix;
                CameraProjection = r_Camera.FieldOfView;
+               r_Camera.OnPositionChanged += Camera_OnPositionChanged;
 
                base.Initialize();
           }
 
-          public override void Update(GameTime gameTime)
+          protected virtual void Camera_OnPositionChanged(object i_Sender, EventArgs i_Args)
           {
-               Position += Velocity * (float)gameTime.ElapsedGameTime.TotalSeconds;
-               Rotations += AngularVelocity * (float)gameTime.ElapsedGameTime.TotalSeconds;
+               r_Camera.ShouldUpdateViewMatrix = false;
+          }
 
-               if(r_Camera.ShouldUpdateViewMatrix)
-               {
-                    CameraView = r_Camera.ViewMatrix;
-                    CameraProjection = r_Camera.FieldOfView;
-               }
-
+          public override void Update(GameTime i_GameTime)
+          {
+               OnUpdate(i_GameTime);
                BuildModelWorldMatrix();
 
-               base.Update(gameTime);
+               base.Update(i_GameTime);
+          }
+
+          protected virtual void OnUpdate(GameTime i_GameTime)
+          {
+               Position += Velocity * (float)i_GameTime.ElapsedGameTime.TotalSeconds;
+               Rotations += AngularVelocity * (float)i_GameTime.ElapsedGameTime.TotalSeconds;
           }
 
           protected void BuildModelWorldMatrix()
@@ -76,6 +88,13 @@ namespace A20_Ex04_Daniel_203105572_Dor_206318537.Models
 
           public override void Draw(GameTime i_GameTime)
           {
+               OnDraw(i_GameTime);
+
+               base.Draw(i_GameTime);
+          }
+
+          protected virtual void OnDraw(GameTime i_GameTime)
+          {
                BasicEffect.World = m_ModelWorldTransform;
                BasicEffect.View = CameraView;
                BasicEffect.Projection = CameraProjection;
@@ -85,8 +104,6 @@ namespace A20_Ex04_Daniel_203105572_Dor_206318537.Models
                     pass.Apply();
                     OnEffectPassDraw(pass, i_GameTime);
                }
-
-               base.Draw(i_GameTime);
           }
 
           protected virtual void OnEffectPassDraw(EffectPass i_Pass, GameTime i_GameTime)

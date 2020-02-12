@@ -10,8 +10,8 @@ namespace A20_Ex04_Daniel_203105572_Dor_206318537.Models
 {
      public class Rectangle3D : Object3D
      {
-          private readonly List<VertexPositionColor> r_TListVertices  = new List<VertexPositionColor>();
-          private readonly List<VertexPositionColor> r_TStripVertices = new List<VertexPositionColor>();
+          private const int k_TListCapacity = 6;
+          private const int k_TStripCapacity = 4;
           private PrimitiveType m_TriangleDrawType;
           private bool m_IsDrawTypeSet;
 
@@ -21,6 +21,8 @@ namespace A20_Ex04_Daniel_203105572_Dor_206318537.Models
                ModelCenter = i_ModelCenter;
                Width = i_Width;
                Height = i_Height;
+               r_TListVertices.Capacity = k_TListCapacity;
+               r_TStripVertices.Capacity = k_TStripCapacity;
           }
 
           public Rectangle3D(float i_Width, float i_Height, Vector3 i_ModelCenter, Game i_Game) 
@@ -32,9 +34,6 @@ namespace A20_Ex04_Daniel_203105572_Dor_206318537.Models
 
           public float Height { get; set; }
 
-          public Vector3 ModelCenter { get; set; }
-
-          public Color Color { get; set; } = Color.Black;
 
           private void initTStripVertices()
           {

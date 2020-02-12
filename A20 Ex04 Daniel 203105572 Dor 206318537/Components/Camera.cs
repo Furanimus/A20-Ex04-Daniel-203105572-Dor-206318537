@@ -1,11 +1,14 @@
 ﻿using A20_Ex04_Daniel_203105572_Dor_206318537.Interfaces;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
+using System;
 
 namespace A20_Ex04_Daniel_203105572_Dor_206318537.Components
 {
      public class Camera : GameService, ICamera
      {
+          public event EventHandler OnPositionChanged;
+
           private bool m_ShouldUpdateViewMatrix = true;
 
           private Matrix m_ProjectionFieldOfView;
@@ -38,9 +41,18 @@ namespace A20_Ex04_Daniel_203105572_Dor_206318537.Components
 
           public bool ShouldUpdateViewMatrix
           {
-               get { return m_ShouldUpdateViewMatrix; }
+               get 
+               { 
+                    return m_ShouldUpdateViewMatrix; 
+               }
+
                set
                {
+                    if (m_ShouldUpdateViewMatrix != value && OnPositionChanged != null)
+                    {
+                         OnPositionChanged.Invoke(this, null);
+                    }
+
                     m_ShouldUpdateViewMatrix = value;
                }
           }
@@ -235,96 +247,29 @@ namespace A20_Ex04_Daniel_203105572_Dor_206318537.Components
                     movementScale *= 100;
                }
                // forward:
-               if (keyboardState.IsKeyDown(Keys.W))
+               if (keyboardState.IsKeyDown(Keys.Up))
                {
                     m_Position -= movementScale * Vector3.Transform(Vector3.UnitZ / 10, RotationQuaternion);
                     ShouldUpdateViewMatrix = true;
                }
                // backwords:
-               else if (keyboardState.IsKeyDown(Keys.Z))
+               else if (keyboardState.IsKeyDown(Keys.Down))
                {
                     m_Position += movementScale * Vector3.Transform(Vector3.UnitZ / 10, RotationQuaternion);
                     ShouldUpdateViewMatrix = true;
                }
 
                // strafe left:
-               if (keyboardState.IsKeyDown(Keys.Q))
+               if (keyboardState.IsKeyDown(Keys.Left))
                {
                     m_Position -= movementScale * Vector3.Transform(Vector3.UnitX / 2, RotationQuaternion);
                     ShouldUpdateViewMatrix = true;
                }
                // strafe right:
-               else if (keyboardState.IsKeyDown(Keys.E))
+               else if (keyboardState.IsKeyDown(Keys.Right))
                {
                     m_Position += movementScale * Vector3.Transform(Vector3.UnitX / 2, RotationQuaternion);
                     ShouldUpdateViewMatrix = true;
-               }
-
-               // up:
-               if (keyboardState.IsKeyDown(Keys.PageUp))
-               {
-                    m_Position += movementScale * Vector3.Transform(Vector3.UnitY / 2, RotationQuaternion);
-                    ShouldUpdateViewMatrix = true;
-               }
-               // down:
-               else if (keyboardState.IsKeyDown(Keys.PageDown))
-               {
-                    m_Position -= movementScale * Vector3.Transform(Vector3.UnitY / 2, RotationQuaternion);
-                    ShouldUpdateViewMatrix = true;
-               }
-
-               m_Rotations = Vector3.Zero;
-
-               // Yaw left:
-               if (keyboardState.IsKeyDown(Keys.Left))
-               {
-                    m_Rotations.Y = sr_RotationSpeed;
-                    ShouldUpdateViewMatrix = true;
-               }
-               // Yaw right:
-               else if (keyboardState.IsKeyDown(Keys.Right))
-               {
-                    m_Rotations.Y = -sr_RotationSpeed;
-                    ShouldUpdateViewMatrix = true;
-               }
-
-               // Pitch Up:
-               if (keyboardState.IsKeyDown(Keys.Up))
-               {
-                    m_Rotations.X = -sr_RotationSpeed;
-                    ShouldUpdateViewMatrix = true;
-               }
-               // Pitch Down:
-               else if (keyboardState.IsKeyDown(Keys.Down))
-               {
-                    m_Rotations.X = sr_RotationSpeed / 2;
-                    ShouldUpdateViewMatrix = true;
-               }
-
-               // Roll Left:
-               if (keyboardState.IsKeyDown(Keys.A))
-               {
-                    m_Rotations.Z = sr_RotationSpeed;
-                    ShouldUpdateViewMatrix = true;
-               }
-               // Roll Right:
-               else if (keyboardState.IsKeyDown(Keys.S))
-               {
-                    m_Rotations.Z = -sr_RotationSpeed;
-                    ShouldUpdateViewMatrix = true;
-               }
-
-               if (keyboardState.IsKeyDown(Keys.R))
-               {
-                    Position = new Vector3(0, 0, 20);
-                    RotationQuaternion = Quaternion.Identity;
-               }
-
-               if (keyboardState.IsKeyDown(Keys.D1))
-               {
-                    Position = new Vector3(255, 1000, -255);
-                    RotationQuaternion = Quaternion.Identity;
-                    this.TargetPosition = new Vector3(255, 0, -255);
                }
           }
      }

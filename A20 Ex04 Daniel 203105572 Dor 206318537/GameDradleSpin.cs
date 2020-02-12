@@ -18,7 +18,7 @@ namespace A20_Ex04_Daniel_203105572_Dor_206318537
           private VertexPositionColor[] m_Vertices;
           private RasterizerState m_RasterizerState;
           private Camera m_Camera;
-          private DradleSpin m_DradleSpin;
+          private Dreidel m_DradleSpin;
 
           public GameDradleSpin()
           {
@@ -34,8 +34,11 @@ namespace A20_Ex04_Daniel_203105572_Dor_206318537
                m_Camera.Position = new Vector3(0, 0, 20);
                m_Camera.TargetPosition = new Vector3(0, 0, 0);
 
-               m_DradleSpin = new DradleSpin(this, 1);
-               m_DradleSpin.Position = new Vector3(2, 2, -20);
+               m_DradleSpin = new Dreidel(this, 1);
+               m_DradleSpin.Position = new Vector3(0, -2, -10);
+               m_DradleSpin.Rotations = new Vector3(0.1f, 0, 0);
+               m_DradleSpin.AngularVelocity = new Vector3(0, 0.5f, 0);
+               m_DradleSpin.TriangleDrawType = PrimitiveType.TriangleStrip;
 
                base.Initialize();
           }
@@ -56,13 +59,6 @@ namespace A20_Ex04_Daniel_203105572_Dor_206318537
           {
                if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                     Exit();
-
-               // TODO: Add your update logic here
-
-               foreach (GameComponent component in this.Components)
-               {
-                    component.Update(i_GameTime);
-               }
 
                base.Update(i_GameTime);
           }
