@@ -7,11 +7,13 @@ namespace A20_Ex04_Daniel_203105572_Dor_206318537.Components
 {
      public class Camera : GameService, ICamera
      {
-          public event EventHandler OnPositionChanged;
-
-          private bool m_ShouldUpdateViewMatrix = true;
-
+          private static readonly float sr_RotationSpeed = MathHelper.ToRadians(0.2f);
           private Matrix m_ProjectionFieldOfView;
+          protected Quaternion m_RotationQuaternion = Quaternion.Identity;
+          protected Vector3 m_TargetPosition = Vector3.Zero;
+          protected Matrix m_ViewMatrix;
+          protected Vector3 m_Rotations = Vector3.Zero;
+          protected Vector3 m_Position = new Vector3(256, 30, 20);
 
           public Camera(Game i_Game) : base(i_Game)
           {
@@ -39,25 +41,7 @@ namespace A20_Ex04_Daniel_203105572_Dor_206318537.Components
                set { m_ProjectionFieldOfView = value; }
           }
 
-          public bool ShouldUpdateViewMatrix
-          {
-               get 
-               { 
-                    return m_ShouldUpdateViewMatrix; 
-               }
-
-               set
-               {
-                    if (m_ShouldUpdateViewMatrix != value && OnPositionChanged != null)
-                    {
-                         OnPositionChanged.Invoke(this, null);
-                    }
-
-                    m_ShouldUpdateViewMatrix = value;
-               }
-          }
-
-          protected Matrix m_ViewMatrix;
+          public bool ShouldUpdateViewMatrix { get; set; }
 
           public Matrix ViewMatrix
           {
@@ -73,13 +57,11 @@ namespace A20_Ex04_Daniel_203105572_Dor_206318537.Components
                }
           }
 
-          protected Vector3 m_TargetPosition = Vector3.Zero;
-
           public Vector3 TargetPosition
           {
                get
                {
-                    if (m_ShouldUpdateViewMatrix)
+                    if (ShouldUpdateViewMatrix)
                     {
                          m_TargetPosition = Vector3.Transform(Vector3.Forward, RotationQuaternion);
                          m_TargetPosition = m_Position + m_TargetPosition;
@@ -98,8 +80,6 @@ namespace A20_Ex04_Daniel_203105572_Dor_206318537.Components
                }
           }
 
-          protected Vector3 m_Rotations = Vector3.Zero;
-
           public Vector3 Rotations
           {
                get
@@ -116,13 +96,11 @@ namespace A20_Ex04_Daniel_203105572_Dor_206318537.Components
                }
           }
 
-          protected Quaternion m_RotationQuaternion = Quaternion.Identity;
-
           public Quaternion RotationQuaternion
           {
                get
                {
-                    if (m_ShouldUpdateViewMatrix)
+                    if (ShouldUpdateViewMatrix)
                     {
                          m_RotationQuaternion *= Quaternion.CreateFromAxisAngle(Vector3.UnitX, m_Rotations.X);
                          m_RotationQuaternion *= Quaternion.CreateFromAxisAngle(Vector3.UnitY, m_Rotations.Y);
@@ -141,8 +119,6 @@ namespace A20_Ex04_Daniel_203105572_Dor_206318537.Components
                }
           }
 
-          // we are standing 20 units in front of our target:
-          protected Vector3 m_Position = new Vector3(256, 30, 20);
 
           public Vector3 Position
           {
@@ -220,7 +196,6 @@ namespace A20_Ex04_Daniel_203105572_Dor_206318537.Components
                }
           }
 
-          static readonly float sr_RotationSpeed = MathHelper.ToRadians(0.2f);
 
           public override void Update(GameTime gameTime)
           {

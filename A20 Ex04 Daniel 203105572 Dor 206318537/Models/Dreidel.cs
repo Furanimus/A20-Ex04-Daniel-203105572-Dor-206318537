@@ -19,7 +19,7 @@ namespace A20_Ex04_Daniel_203105572_Dor_206318537.Models
           public Dreidel(Game i_Game, int i_CallOrder)
                : base(i_Game, i_CallOrder)
           {
-
+               this.Game.Components.Add(this);
                Box box = new Box(k_BoxDimension, k_BoxDimension, k_BoxDimension, this.Game);
                box.IsMultipleColorBox = true;
 
