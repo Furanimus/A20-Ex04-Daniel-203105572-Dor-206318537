@@ -67,9 +67,9 @@ namespace A20_Ex04_Daniel_203105572_Dor_206318537.Models
                pyramid.IsYFlip = true;
                pyramid.Color = Color.Gray;
 
-               gimelLetter.Rotations = new Vector3(0, MathHelper.PiOver4, 0);
-               heLetter.Rotations = new Vector3(0, MathHelper.PiOver2, 0);
-               peLetter.Rotations = new Vector3(0, MathHelper.ToRadians(135), 0);
+               gimelLetter.Rotations = new Vector3(0, MathHelper.PiOver2, 0);
+               heLetter.Rotations = new Vector3(0, MathHelper.Pi, 0);
+               peLetter.Rotations = new Vector3(0, MathHelper.ToRadians(270), 0);
 
                AddBone(box);
                AddBone(holder);
