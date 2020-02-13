@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework.Graphics;
 using A20_Ex04_Daniel_203105572_Dor_206318537.Components;
 using System.Collections.Generic;
 using System;
+using A20_Ex04_Daniel_203105572_Dor_206318537.Utils;
 
 namespace A20_Ex04_Daniel_203105572_Dor_206318537.Models
 {
@@ -55,9 +56,15 @@ namespace A20_Ex04_Daniel_203105572_Dor_206318537.Models
 
           public override void Initialize()
           {
+
+               if (this.BasicEffect == null)
+               {
+                    this.BasicEffect = (this.Game as BaseGame).BasicEffect;
+               }
+
                CameraView = r_Camera.ViewMatrix;
                CameraProjection = r_Camera.FieldOfView;
-
+               
                base.Initialize();
           }
 

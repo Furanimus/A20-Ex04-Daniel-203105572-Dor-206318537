@@ -6,23 +6,27 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace A20_Ex04_Daniel_203105572_Dor_206318537.Managers
 {
      public class GameManager : RegisteredComponent
      {
           private const string k_Title = @"Score: {0}   Bet: {1}";
+          private const int k_DreidelsCount = 6;
+          private const int k_LetterCount = 4;
           private readonly IInputManager r_InputManager;
           private readonly IRandomBehavior r_RandomBehavior;
-          private bool m_isGameSpinState;
+          private readonly List<eDreidelLetter> r_DreidelsRandomLetters = new List<eDreidelLetter>(k_DreidelsCount);
+          private bool m_TakeBet = true;
+          private bool m_IsSpinning = false;
           private int m_Score;
           private int m_DreidelStoppedCount;
-          private float m_TimeSinceStartRound;
-          private Keys m_Bet;
-          private float k_VelocityToSubstruct = 0.1f;
+          private eDreidelLetter m_Bet = eDreidelLetter.None;
+          private string m_BetStr;
+          private List<float> m_DreidelsDistancesToEndPoint = new List<float>(k_DreidelsCount);
+          private List<float> m_DreidelsInitialVelocity = new List<float>(k_DreidelsCount);
+          private List<bool> m_DreidelsStopped = new List<bool>(k_DreidelsCount);
+          private List<float> m_DreidelsInitialRotation = new List<float>(k_DreidelsCount);
 
           public GameManager(Game i_Game)
                : base(i_Game, int.MaxValue)
@@ -33,130 +37,164 @@ namespace A20_Ex04_Daniel_203105572_Dor_206318537.Managers
 
           public override void Update(GameTime i_GameTime)
           {
-               Game.Window.Title = string.Format(k_Title, m_Score, m_Bet.ToString());
+               Game.Window.Title = string.Format(k_Title, m_Score, m_BetStr);
 
-               if (!m_isGameSpinState)
+               if (m_TakeBet)
                {
-                    readPlayerBet();
-
-                    if (r_InputManager.KeyPressed(Keys.Space) && m_Bet != 0)
-                    {
-                         m_isGameSpinState = true;
-                         startDreidelSpinRound();
-                    }
+                    takeBet();
                }
                else
                {
-                    m_TimeSinceStartRound += (float)i_GameTime.ElapsedGameTime.TotalSeconds;
-
-                    foreach (Object3D component in (Game as BaseGame).World)
+                    if (m_IsSpinning == true)
                     {
-                         if (component is Dreidel)
+                         spinDreidels();
+
+                         if (m_DreidelStoppedCount == 6)
                          {
-                              if (!(component as Dreidel).IsIdle)
-                              {
-                                   lowerDreidelAngularVelocity(component as Dreidel, i_GameTime);
-                              }
-                              else
-                              {
-                                   component.AngularVelocity = Vector3.Zero;
-                                   //fixDreidelFacing();
-                              }
+                              updateScore();
+                              m_DreidelStoppedCount = 0;
+                              m_IsSpinning = false;
+                              m_TakeBet = true;
+                              m_Bet = eDreidelLetter.None;
+                              m_BetStr = string.Empty;
                          }
-                    }
-
-                    if (m_DreidelStoppedCount == (Game as BaseGame).World.Count)
-                    {
-                         m_isGameSpinState = !m_isGameSpinState;
-                         //checkScore();
                     }
                }
 
                base.Update(i_GameTime);
           }
 
-          private void fixDreidelFacing(Dreidel i_Dreidel)
+          private void updateScore()
           {
-               float yRotation = i_Dreidel.Rotations.Y % MathHelper.TwoPi;
-
-
-
-          }
-
-          private void lowerDreidelAngularVelocity(Dreidel i_Dreidel, GameTime i_GameTime)
-          {
-               float delta = getYRotationDelta(i_Dreidel.AngularVelocity.Y % MathHelper.TwoPi);
-               float velocity = (delta / m_TimeSinceStartRound) - ((m_TimeSinceStartRound * k_VelocityToSubstruct + k_VelocityToSubstruct * (float)Math.Pow(m_TimeSinceStartRound, 2)) / 2);
-               i_Dreidel.AngularVelocity = new Vector3(0, MathHelper.Clamp(velocity, 0, int.MaxValue), 0);
-               // rotation % 2Pi = 280deg | 270 < 280 <= 360 | delta = 360 - 280 = 80 | this.velocity = delta / total_time ...
-               // v = 20/total_time - (total_time * velocity_to_substract + velocity_to_substract * total_time^2)/ 2 * total_time
-
-               //i_Dreidel.AngularVelocity = new Vector3(0, 0.8f, 0) * (float)i_GameTime.ElapsedGameTime.TotalSeconds;
-
-               //// current deg: 70 | 0 < 70 < 90 | 90 - 70 = 20, 0 - 70 = 70
-               //if (i_Dreidel.AngularVelocity.Y < 0)
-               //{
-               //     (i_Dreidel as Dreidel).IsIdle = true;
-               //     i_Dreidel.AngularVelocity = Vector3.Zero;
-               //     m_DreidelStoppedCount++;
-               //     //fixDreidelFacing();
-               //}
-          }
-
-          private float getYRotationDelta(float i_CurrentYRotation)
-          {
-               if (i_CurrentYRotation <= MathHelper.PiOver2 && i_CurrentYRotation > 0)
+               foreach(eDreidelLetter letter in r_DreidelsRandomLetters)
                {
-                    return MathHelper.PiOver2 - i_CurrentYRotation;
-               }
-               else if (i_CurrentYRotation <= MathHelper.Pi && i_CurrentYRotation > MathHelper.PiOver2)
-               {
-                    return MathHelper.Pi - i_CurrentYRotation;
-               }
-               else if (i_CurrentYRotation <= MathHelper.ToRadians(270) && i_CurrentYRotation > MathHelper.Pi)
-               {
-                    return MathHelper.ToRadians(270) - i_CurrentYRotation;
-               }
-               else
-               {
-                    return MathHelper.TwoPi - i_CurrentYRotation;
-               }
-
-          }
-
-          private void startDreidelSpinRound()
-          {
-               setRandomAngularVelocityToDreidels();
-          }
-
-          private void setRandomAngularVelocityToDreidels()
-          {
-               foreach (Object3D dreidel in (Game as BaseGame).World)
-               {
-                    dreidel.AngularVelocity = r_RandomBehavior.GenerateRandomAngularVelocityY();
-                    (dreidel as Dreidel).IsIdle = false;
+                    if(letter == m_Bet)
+                    {
+                         m_Score++;
+                    }
                }
           }
 
-          private void readPlayerBet()
+          private void chooseRandomLetters()
+          {
+               for(int i = 0; i < k_DreidelsCount; i++)
+               {
+                    eDreidelLetter letter = (eDreidelLetter)r_RandomBehavior.GetRandomIntegerNumber(0, k_LetterCount);
+
+                    if (r_DreidelsRandomLetters.Count < k_DreidelsCount)
+                    {
+                         r_DreidelsRandomLetters.Add(letter);
+                    }
+                    else
+                    {
+                         r_DreidelsRandomLetters[i] = letter;
+                    }
+               }
+          }
+
+          private void restartSpin()
+          {
+               Composite3D world = (this.Game as BaseGame).World;
+
+               for (int i = 0; i < m_DreidelsStopped.Count; i++)
+               {
+                    Composite3D dreidel = world[i] as Composite3D;
+
+                    m_DreidelsStopped[i] = false;
+                    m_DreidelsDistancesToEndPoint[i] = generateRandomDistanceLength(i);
+                    m_DreidelsInitialVelocity[i] = (float)r_RandomBehavior.GetRandomDoubleNumber(10, 25);
+                    dreidel.AngularVelocity = new Vector3(0, m_DreidelsInitialVelocity[i], 0);
+                    m_DreidelsInitialRotation[i] = dreidel.Rotations.Y;
+               }
+          }
+
+          private void spinDreidels()
+          {
+               int current = 0;
+               Composite3D world = (this.Game as BaseGame).World;
+
+               foreach(Object3D component in world)
+               {
+                    if(component is Dreidel)
+                    {
+                         if (m_DreidelsDistancesToEndPoint.Count < current + 1)
+                         {
+                              m_DreidelsStopped.Add(false);
+                              m_DreidelsInitialRotation.Add(component.Rotations.Y);
+                              m_DreidelsDistancesToEndPoint.Add(generateRandomDistanceLength(current));
+                              m_DreidelsInitialVelocity.Add((float)r_RandomBehavior.GetRandomDoubleNumber(10, 25));
+                              component.AngularVelocity = new Vector3(0, m_DreidelsInitialVelocity[current], 0);
+                         }
+
+                         if (!m_DreidelsStopped[current])
+                         {
+                              if (component.AngularVelocity.Y <= 0.2f)
+                              {
+                                   if (component.Rotations.Y >= m_DreidelsInitialRotation[current] + m_DreidelsDistancesToEndPoint[current])
+                                   {
+                                        component.AngularVelocity = Vector3.Zero;
+                                        m_DreidelStoppedCount++;
+                                        m_DreidelsStopped[current] = true;
+                                   }
+                              }
+                              else
+                              {
+                                   float percentageToDecrease = 1 - ((component.Rotations.Y - m_DreidelsInitialRotation[current]) / m_DreidelsDistancesToEndPoint[current]);
+                                   component.AngularVelocity = new Vector3(0, m_DreidelsInitialVelocity[current] * percentageToDecrease, 0);
+                              }
+                         }
+
+                         current++;
+                    }
+               }
+          }
+
+          private float generateRandomDistanceLength(int i_CurrentDreidel)
+          {
+               Object3D dreidel = (this.Game as BaseGame).World[i_CurrentDreidel];
+               float offsetFromZeroRadians = dreidel.Rotations.Y % MathHelper.TwoPi;
+               float circlesCount = MathHelper.TwoPi * r_RandomBehavior.GetRandomIntegerNumber(3, 7);
+               float rotationsToLetter = MathHelper.PiOver2 * (4 - (float)r_DreidelsRandomLetters[i_CurrentDreidel]);
+
+               return rotationsToLetter - offsetFromZeroRadians + circlesCount;
+          }
+
+          private void takeBet()
           {
                if (r_InputManager.KeyPressed(Keys.B))
                {
-                    m_Bet = Keys.B;
+                    m_Bet = eDreidelLetter.N;
+                    m_BetStr = "נ";
                }
+
                if (r_InputManager.KeyPressed(Keys.D))
                {
-                    m_Bet = Keys.D;
+                    m_Bet = eDreidelLetter.G;
+                    m_BetStr = "ג";
                }
+
                if (r_InputManager.KeyPressed(Keys.V))
                {
-                    m_Bet = Keys.V;
+                    m_BetStr = "ה";
+                    m_Bet = eDreidelLetter.H;
                }
+
                if (r_InputManager.KeyPressed(Keys.P))
                {
-                    m_Bet = Keys.P;
+                    m_BetStr = "פ";
+                    m_Bet = eDreidelLetter.P;
+               }
+
+               if(r_InputManager.KeyPressed(Keys.Space))
+               {
+                    if (m_Bet != eDreidelLetter.None)
+                    {
+                         chooseRandomLetters();
+                         restartSpin();
+                         m_TakeBet = false;
+                         m_IsSpinning = true;
+                    }
                }
           }
-
      }
 }

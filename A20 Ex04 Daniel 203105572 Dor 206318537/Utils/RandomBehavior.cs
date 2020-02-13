@@ -71,9 +71,15 @@ namespace A20_Ex04_Daniel_203105572_Dor_206318537.Utils
                }
           }
 
-          public int GetRandomNumber(int i_Min, int i_Max)
+          public int GetRandomIntegerNumber(int i_Min, int i_Max)
           {
                return r_Random.Next(i_Min, i_Max);
+          }
+
+          public double GetRandomDoubleNumber(int i_Min, int i_Max)
+          {
+               double randDouble = 1 - r_Random.NextDouble();
+               return (randDouble * (i_Max - i_Min)) + i_Min;
           }
 
           public TimeSpan GetRandomIntervalMilliseconds(int i_MillisecondsMaxVal)
@@ -89,25 +95,10 @@ namespace A20_Ex04_Daniel_203105572_Dor_206318537.Utils
           public Vector3 GenerateRandomVector3()
           {
                return new Vector3(
-                    GetRandomNumber(k_XLowestThreshold, k_XHighestThreshold),
-                    GetRandomNumber(k_YLowestThreshold, k_YHighestThreshold),
-                    GetRandomNumber(k_ZLowestThreshold, k_ZHighestThreshold)
+                    GetRandomIntegerNumber(k_XLowestThreshold, k_XHighestThreshold),
+                    GetRandomIntegerNumber(k_YLowestThreshold, k_YHighestThreshold),
+                    GetRandomIntegerNumber(k_ZLowestThreshold, k_ZHighestThreshold)
                     );
-          }
-
-          public Vector3 GenerateRandomAngularVelocityX()
-          {
-               return new Vector3(GetRandomNumber(k_MinAngularVelocity, k_MaxAngularVelocity), 0, 0);
-          }
-
-          public Vector3 GenerateRandomAngularVelocityY()
-          {
-               return new Vector3(0, GetRandomNumber(k_MinAngularVelocity, k_MaxAngularVelocity), 0);
-          }
-
-          public Vector3 GenerateRandomAngularVelocityZ()
-          {
-               return new Vector3(0, 0, GetRandomNumber(k_MinAngularVelocity, k_MaxAngularVelocity));
           }
      }
 }

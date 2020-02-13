@@ -12,6 +12,8 @@ namespace A20_Ex04_Daniel_203105572_Dor_206318537.Models
      public class Composite3D : Object3D, ICollection
      {
           private readonly List<Object3D> r_Components;
+          private Vector3 m_Rotations;
+          private Vector3 m_Position;
 
           public Composite3D(Game i_Game)
                : this(i_Game, int.MaxValue, null)
@@ -211,15 +213,15 @@ namespace A20_Ex04_Daniel_203105572_Dor_206318537.Models
           {
                get
                {
-                    return base.Rotations;
+                    return m_Rotations;
                }
                set
                {
-                    base.Rotations = value;
+                    m_Rotations = value;
 
                     foreach (Object3D component in r_Components)
                     {
-                         component.Rotations += value;
+                         component.Rotations = value;
                     }
                }
           }
@@ -232,17 +234,20 @@ namespace A20_Ex04_Daniel_203105572_Dor_206318537.Models
 
           public override void Initialize()
           {
+               base.Initialize();
+
                foreach(Object3D component in r_Components)
                {
                     component.Initialize();
                }
-               
-               base.Initialize();
           }
 
           protected override void OnUpdate(GameTime i_GameTime)
           {
-               if(r_Camera.ShouldUpdateViewMatrix)
+               m_Position += Velocity * (float)i_GameTime.ElapsedGameTime.TotalSeconds;
+               m_Rotations += AngularVelocity * (float)i_GameTime.ElapsedGameTime.TotalSeconds;
+
+               if (r_Camera.ShouldUpdateViewMatrix)
                {
                     foreach (Object3D component in r_Components)
                     {

@@ -12,21 +12,22 @@ namespace A20_Ex04_Daniel_203105572_Dor_206318537.Models
      {
           protected readonly List<VertexPositionColor> r_TListVertices = new List<VertexPositionColor>();
           protected readonly List<VertexPositionColor> r_TStripVertices = new List<VertexPositionColor>();
-          private PrimitiveType m_TriangleDrawType = PrimitiveType.TriangleStrip;
+          private VertexBuffer m_VertexBuffer;
+          private List<short> m_Indices;
+          private IndexBuffer m_IndexBuffer;
 
-          public Pyramid (float i_Width, float i_Height, float i_PyramidVertical, Game i_Game, int i_CallOrder)
+          public Pyramid (Game i_Game, int i_CallOrder)
                : base(i_Game, i_CallOrder)
           {
                r_TStripVertices.Capacity = 10;
                r_TListVertices.Capacity = 18;
 
-               Width = i_Width;
-               Height = i_Height;
-               Vertical = i_PyramidVertical;
+               Width = Height = 5;
+               Vertical = 2.5f;
           }
 
-          public Pyramid(float i_Width, float i_Height, float i_PyramidVertical, Game i_Game) 
-               : this(i_Width, i_Height, i_PyramidVertical, i_Game, int.MaxValue)
+          public Pyramid(Game i_Game) 
+               : this(i_Game, int.MaxValue)
           {
           }
 
@@ -36,36 +37,20 @@ namespace A20_Ex04_Daniel_203105572_Dor_206318537.Models
 
           public float Vertical { get; set; }
 
-          public override PrimitiveType TriangleDrawType
-          {
-               get
-               {
-                    return m_TriangleDrawType;
-               }
-
-               set
-               {
-                    m_TriangleDrawType = value;
-
-                    if(m_TriangleDrawType == PrimitiveType.TriangleList)
-                    {
-                         initTListVertices();
-                    }
-                    else if(m_TriangleDrawType == PrimitiveType.TriangleStrip)
-                    {
-                         initTStripVertices();
-                    }
-               }
-          }
+          public bool UseVertexAndIndexBuffer { get; set; }
 
           public override void Initialize()
           {
-               if(r_TListVertices.Count == 0 && r_TStripVertices.Count == 0)
+               if (TriangleDrawType == PrimitiveType.TriangleStrip || UseVertexAndIndexBuffer)
                {
                     initTStripVertices();
                }
+               else if (TriangleDrawType == PrimitiveType.TriangleList)
+               {
+                    initTListVertices();
+               }
 
-               if(IsYFlip)
+               if (IsYFlip)
                {
                     flipPyramid(1, -1, 1);
 
@@ -75,17 +60,54 @@ namespace A20_Ex04_Daniel_203105572_Dor_206318537.Models
                     }
                }
 
-               if (IsXFlip)
+               if (UseVertexAndIndexBuffer)
                {
-                    flipPyramid(-1, 1, 1);
-               }
-
-               if(IsZFlip)
-               {
-                    flipPyramid(1, 1, -1);
+                    initVertexAndIndexBuffer();
                }
 
                base.Initialize();
+          }
+
+          private void initVertexAndIndexBuffer()
+          {
+               if (!IsYFlip)
+               {
+                    m_Indices = new List<short>()
+                    {
+                         0, 1, 2, 
+                         2, 1, 3,
+                         3, 1, 4, 
+                         4, 1, 0,
+                         4, 0, 2, 2, 4, 3
+                    };
+               }
+               else
+               {
+                    m_Indices = new List<short>()
+                    {
+                         0, 4, 2, 2, 4, 3,
+                         1, 0, 2, 
+                         1, 2, 3,
+                         1, 3, 4,
+                         1, 4, 0
+                    };
+               }
+
+               m_VertexBuffer = new VertexBuffer(
+                   this.GraphicsDevice,
+                   typeof(VertexPositionColor),
+                   r_TStripVertices.Count,
+                   BufferUsage.WriteOnly);
+
+               m_VertexBuffer.SetData<VertexPositionColor>(r_TStripVertices.ToArray(), 0, r_TStripVertices.Count);
+
+               m_IndexBuffer = new IndexBuffer(
+                   this.GraphicsDevice,
+                   typeof(short),
+                   m_Indices.Count,
+                   BufferUsage.WriteOnly);
+
+               m_IndexBuffer.SetData(m_Indices.ToArray());
           }
 
           private void initTStripVertices()
@@ -131,14 +153,9 @@ namespace A20_Ex04_Daniel_203105572_Dor_206318537.Models
                r_TListVertices.Add(r_TListVertices[2]);
                r_TListVertices.Add(r_TListVertices[8]);
                r_TListVertices.Add(r_TListVertices[5]);
-
           }
 
-          public bool IsXFlip { get; set; }
-
           public bool IsYFlip { get; set; }
-
-          public bool IsZFlip { get; set; }
 
           private void flipPyramid(float i_X, float i_Y, float i_Z)
           {
@@ -164,7 +181,20 @@ namespace A20_Ex04_Daniel_203105572_Dor_206318537.Models
 
           protected override void OnEffectPassDraw(EffectPass i_Pass, GameTime i_GameTime)
           {
-               if (TriangleDrawType == PrimitiveType.TriangleStrip)
+               if(UseVertexAndIndexBuffer)
+               {
+                    this.GraphicsDevice.Indices = m_IndexBuffer;
+                    this.GraphicsDevice.SetVertexBuffer(m_VertexBuffer);
+
+                    this.GraphicsDevice.DrawIndexedPrimitives(
+                        PrimitiveType.TriangleList,
+                        0, // baseVertex
+                        0, // minVertexIdx
+                        m_VertexBuffer.VertexCount, // num of vertices
+                        0,  // startIdx in the vertexBuffer
+                        6); // num of primitives 
+               }
+               else if (TriangleDrawType == PrimitiveType.TriangleStrip)
                {
                     this.GraphicsDevice.DrawUserPrimitives<VertexPositionColor>(
                               TriangleDrawType, r_TStripVertices.ToArray(), 0, 3);

@@ -9,6 +9,8 @@ namespace A20_Ex04_Daniel_203105572_Dor_206318537.Utils
 {
      public abstract class BaseGame : Game
      {
+          private RasterizerState m_RasterizerState;
+
           public BaseGame()
           {
                InitServices();
@@ -25,14 +27,18 @@ namespace A20_Ex04_Daniel_203105572_Dor_206318537.Utils
 
           protected override void Initialize()
           {
-               this.SpriteBatch = new SpriteBatch(this.GraphicsDevice);
-               this.Services.AddService(typeof(SpriteBatch), this.SpriteBatch);
+               BasicEffect = new BasicEffect(this.GraphicsDevice);
+               this.BasicEffect.VertexColorEnabled = true;
+               m_RasterizerState = new RasterizerState();
+               m_RasterizerState.CullMode = CullMode.CullCounterClockwiseFace;
+               this.GraphicsDevice.RasterizerState = m_RasterizerState;
 
                base.Initialize();
           }
 
           protected virtual void InitServices()
           {
+               GraphicsDeviceManager graphics = new GraphicsDeviceManager(this);
                InputManager = new InputManager(this);
                RandomBehavior = new RandomBehavior(this);
                Camera = new Camera(this);
@@ -44,10 +50,10 @@ namespace A20_Ex04_Daniel_203105572_Dor_206318537.Utils
 
           protected IRandomBehavior RandomBehavior { get; set; }
 
-          protected SpriteBatch SpriteBatch { get; set; }
-
           public Composite3D World { get; set; }
 
           public ICamera Camera { get; set; } 
+
+          public BasicEffect BasicEffect { get; set; }
      }
 }

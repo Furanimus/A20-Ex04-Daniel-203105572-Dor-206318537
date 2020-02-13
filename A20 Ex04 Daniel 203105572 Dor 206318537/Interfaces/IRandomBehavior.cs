@@ -17,7 +17,7 @@ namespace A20_Ex04_Daniel_203105572_Dor_206318537.Interfaces
 
           void TryInvokeDelayedAction();
 
-          int GetRandomNumber(int i_Min, int i_Max);
+          int GetRandomIntegerNumber(int i_Min, int i_Max);
 
           TimeSpan GetRandomIntervalMilliseconds(int i_MillisecondsMaxVal);
 
@@ -25,10 +25,6 @@ namespace A20_Ex04_Daniel_203105572_Dor_206318537.Interfaces
 
           Vector3 GenerateRandomVector3();
 
-          Vector3 GenerateRandomAngularVelocityX();
-
-          Vector3 GenerateRandomAngularVelocityY();
-
-          Vector3 GenerateRandomAngularVelocityZ();
+          double GetRandomDoubleNumber(int i_Min, int i_Max);
      }
 }

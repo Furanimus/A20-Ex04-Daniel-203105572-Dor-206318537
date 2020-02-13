@@ -36,7 +36,6 @@ namespace A20_Ex04_Daniel_203105572_Dor_206318537.Models
 
           public float Height { get; set; }
 
-
           private void initTStripVertices()
           {
                float distanceX = Width / 2;

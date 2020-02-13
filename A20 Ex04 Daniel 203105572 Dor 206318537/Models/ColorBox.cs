@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace A20_Ex04_Daniel_203105572_Dor_206318537.Models
 {
-     public class ColorBox : Object3D
+     public class ColorBox : Box
      {
           private const int k_TListSize                                       = 24;
           private const int k_TStripVerticesOneColorCount                     = 18;
@@ -24,34 +24,29 @@ namespace A20_Ex04_Daniel_203105572_Dor_206318537.Models
           private const int k_VerticesInOneFace                               = 4;
           private const int k_TrianglesInOneFace                              = 2;
           private const int k_FacesInCube                                     = 6;
-          protected readonly List<VertexPositionColor> r_TListVertices = new List<VertexPositionColor>();
-          protected readonly List<VertexPositionColor> r_TStripVertices = new List<VertexPositionColor>();
+          protected readonly List<VertexPositionColor> r_TListVertices        = new List<VertexPositionColor>();
+          protected readonly List<VertexPositionColor> r_TStripVertices       = new List<VertexPositionColor>();
           private readonly List<VertexPositionColor> r_TStripVerticesMulColor = new List<VertexPositionColor>(k_TStripVerticesMulColorCount);
-          private PrimitiveType m_TriangleDrawType                            = PrimitiveType.TriangleStrip;
           private bool m_IsMultipleColorBox;
           private bool m_IsMulColorBoxInitialzied;
 
-          public ColorBox(float i_Width, float i_Height, float i_Depth, Game i_Game, int i_CallOrder)
+          public ColorBox(Game i_Game, int i_CallOrder)
                : base(i_Game, i_CallOrder)
           {
-               Width = i_Width;
-               Height = i_Height;
-               Depth = i_Depth;
                r_TListVertices.Capacity = k_TListSize;
                r_TStripVertices.Capacity = k_TStripVerticesOneColorCount;
           }
 
-          public ColorBox(float i_Width, float i_Height, float i_Depth, Game i_Game)
-               : this(i_Width, i_Height, i_Depth, i_Game, int.MaxValue)
+          public ColorBox(Game i_Game)
+               : this(i_Game, int.MaxValue)
           {
           }
-
 
           private void genTListVerticesFromTStripVertices(int i_StartIndex, int i_EndIndex)
           {
                for (int i = i_StartIndex; i <= i_EndIndex; i++)
                {
-                    Color currentColor = chooseColor(i);
+                    Color currentColor = IsMultipleColorBox ? chooseColor(i) : Color;
 
                     if (i % 2 == 0)
                     {
@@ -151,31 +146,56 @@ namespace A20_Ex04_Daniel_203105572_Dor_206318537.Models
                float distanceY = Height / 2;
                float distanceZ = Depth / 2;
 
-               r_TStripVerticesMulColor.Add(new VertexPositionColor(new Vector3(-distanceX + ModelCenter.X, -distanceY + ModelCenter.Y, distanceZ + ModelCenter.Z), FrontFaceColor));
-               r_TStripVerticesMulColor.Add(new VertexPositionColor(new Vector3(-distanceX + ModelCenter.X, distanceY + ModelCenter.Y, distanceZ + ModelCenter.Z), FrontFaceColor));
-               r_TStripVerticesMulColor.Add(new VertexPositionColor(new Vector3(distanceX + ModelCenter.X, -distanceY + ModelCenter.Y, distanceZ + ModelCenter.Z), FrontFaceColor));
-               r_TStripVerticesMulColor.Add(new VertexPositionColor(new Vector3(distanceX + ModelCenter.X, distanceY + ModelCenter.Y, distanceZ + ModelCenter.Z), FrontFaceColor));
+               addFrontVertices(distanceX, distanceY, distanceZ);
+               addRightVertices(distanceX, distanceY, distanceZ);
+               addBackVertices(distanceX, distanceY, distanceZ);
+               addLeftVertices(distanceX, distanceY, distanceZ);
+               addTopVertices();
+               addBottomVertices();
+          }
 
+          private void addFrontVertices(float i_DistanceX, float i_DistanceY, float i_DistanceZ)
+          {
+               r_TStripVerticesMulColor.Add(new VertexPositionColor(new Vector3(-i_DistanceX + ModelCenter.X, -i_DistanceY + ModelCenter.Y, i_DistanceZ + ModelCenter.Z), FrontFaceColor));
+               r_TStripVerticesMulColor.Add(new VertexPositionColor(new Vector3(-i_DistanceX + ModelCenter.X, i_DistanceY + ModelCenter.Y, i_DistanceZ + ModelCenter.Z), FrontFaceColor));
+               r_TStripVerticesMulColor.Add(new VertexPositionColor(new Vector3(i_DistanceX + ModelCenter.X, -i_DistanceY + ModelCenter.Y, i_DistanceZ + ModelCenter.Z), FrontFaceColor));
+               r_TStripVerticesMulColor.Add(new VertexPositionColor(new Vector3(i_DistanceX + ModelCenter.X, i_DistanceY + ModelCenter.Y, i_DistanceZ + ModelCenter.Z), FrontFaceColor));
+          }
+
+          private void addRightVertices(float i_DistanceX, float i_DistanceY, float i_DistanceZ)
+          {
                r_TStripVerticesMulColor.Add(new VertexPositionColor(r_TStripVerticesMulColor[2].Position, RightFaceColor));
                r_TStripVerticesMulColor.Add(new VertexPositionColor(r_TStripVerticesMulColor[3].Position, RightFaceColor));
-               r_TStripVerticesMulColor.Add(new VertexPositionColor(new Vector3(distanceX + ModelCenter.X, -distanceY + ModelCenter.Y, -distanceZ + ModelCenter.Z), RightFaceColor));
-               r_TStripVerticesMulColor.Add(new VertexPositionColor(new Vector3(distanceX + ModelCenter.X, distanceY + ModelCenter.Y, -distanceZ + ModelCenter.Z), RightFaceColor));
+               r_TStripVerticesMulColor.Add(new VertexPositionColor(new Vector3(i_DistanceX + ModelCenter.X, -i_DistanceY + ModelCenter.Y, -i_DistanceZ + ModelCenter.Z), RightFaceColor));
+               r_TStripVerticesMulColor.Add(new VertexPositionColor(new Vector3(i_DistanceX + ModelCenter.X, i_DistanceY + ModelCenter.Y, -i_DistanceZ + ModelCenter.Z), RightFaceColor));
+          }
 
+          private void addBackVertices(float i_DistanceX, float i_DistanceY, float i_DistanceZ)
+          {
                r_TStripVerticesMulColor.Add(new VertexPositionColor(r_TStripVerticesMulColor[6].Position, BackFaceColor));
                r_TStripVerticesMulColor.Add(new VertexPositionColor(r_TStripVerticesMulColor[7].Position, BackFaceColor));
-               r_TStripVerticesMulColor.Add(new VertexPositionColor(new Vector3(-distanceX + ModelCenter.X, -distanceY + ModelCenter.Y, -distanceZ + ModelCenter.Z), BackFaceColor));
-               r_TStripVerticesMulColor.Add(new VertexPositionColor(new Vector3(-distanceX + ModelCenter.X, distanceY + ModelCenter.Y, -distanceZ + ModelCenter.Z), BackFaceColor));
+               r_TStripVerticesMulColor.Add(new VertexPositionColor(new Vector3(-i_DistanceX + ModelCenter.X, -i_DistanceY + ModelCenter.Y, -i_DistanceZ + ModelCenter.Z), BackFaceColor));
+               r_TStripVerticesMulColor.Add(new VertexPositionColor(new Vector3(-i_DistanceX + ModelCenter.X, i_DistanceY + ModelCenter.Y, -i_DistanceZ + ModelCenter.Z), BackFaceColor));
+          }
 
+          private void addLeftVertices(float i_DistanceX, float i_DistanceY, float i_DistanceZ)
+          {
                r_TStripVerticesMulColor.Add(new VertexPositionColor(r_TStripVerticesMulColor[10].Position, LeftFaceColor));
                r_TStripVerticesMulColor.Add(new VertexPositionColor(r_TStripVerticesMulColor[11].Position, LeftFaceColor));
-               r_TStripVerticesMulColor.Add(new VertexPositionColor(new Vector3(-distanceX + ModelCenter.X, -distanceY + ModelCenter.Y, distanceZ + ModelCenter.Z), LeftFaceColor));
-               r_TStripVerticesMulColor.Add(new VertexPositionColor(new Vector3(-distanceX + ModelCenter.X, distanceY + ModelCenter.Y, distanceZ + ModelCenter.Z), LeftFaceColor));
+               r_TStripVerticesMulColor.Add(new VertexPositionColor(new Vector3(-i_DistanceX + ModelCenter.X, -i_DistanceY + ModelCenter.Y, i_DistanceZ + ModelCenter.Z), LeftFaceColor));
+               r_TStripVerticesMulColor.Add(new VertexPositionColor(new Vector3(-i_DistanceX + ModelCenter.X, i_DistanceY + ModelCenter.Y, i_DistanceZ + ModelCenter.Z), LeftFaceColor));
+          }
 
+          private void addTopVertices()
+          {
                r_TStripVerticesMulColor.Add(new VertexPositionColor(r_TStripVerticesMulColor[0].Position, TopFaceColor));
                r_TStripVerticesMulColor.Add(new VertexPositionColor(r_TStripVerticesMulColor[10].Position, TopFaceColor));
                r_TStripVerticesMulColor.Add(new VertexPositionColor(r_TStripVerticesMulColor[2].Position, TopFaceColor));
                r_TStripVerticesMulColor.Add(new VertexPositionColor(r_TStripVerticesMulColor[6].Position, TopFaceColor));
+          }
 
+          private void addBottomVertices()
+          {
                r_TStripVerticesMulColor.Add(new VertexPositionColor(r_TStripVerticesMulColor[1].Position, BottomFaceColor));
                r_TStripVerticesMulColor.Add(new VertexPositionColor(r_TStripVerticesMulColor[11].Position, BottomFaceColor));
                r_TStripVerticesMulColor.Add(new VertexPositionColor(r_TStripVerticesMulColor[3].Position, BottomFaceColor));
@@ -193,12 +213,6 @@ namespace A20_Ex04_Daniel_203105572_Dor_206318537.Models
           public Color TopFaceColor { get; set; } = Color.Gray;
 
           public Color BottomFaceColor { get; set; } = Color.Gray;
-
-          public float Width { get; set; }
-          
-          public float Height { get; set; }
-          
-          public float Depth { get; set; }
 
           public bool IsMultipleColorBox
           {
@@ -219,36 +233,20 @@ namespace A20_Ex04_Daniel_203105572_Dor_206318537.Models
                }
           }
 
-          public new PrimitiveType TriangleDrawType
-          {
-               get
-               {
-                    return m_TriangleDrawType;
-               }
-
-               set
-               {
-                    m_TriangleDrawType = value;
-
-                    if(m_TriangleDrawType == PrimitiveType.TriangleList)
-                    {
-                         if(r_TListVertices.Count == 0)
-                         {
-                              if(r_TStripVertices.Count == 0)
-                              {
-                                   initOneColorTStripVertices();
-                              }
-
-                              genTListVerticesFromTStripVertices(k_SideFacesStartIndex, k_SideFacesEndIndex);
-                              genTListVerticesFromTStripVertices(k_TopFaceStartIndex, k_TopFaceEndIndex);
-                              genTListVerticesFromTStripVertices(k_BottomFaceStartIndex, k_BottomFaceEndIndex);
-                         }
-                    }
-               }
-          }
-
           public override void Initialize()
           {
+               if(TriangleDrawType == PrimitiveType.TriangleList)
+               {
+                    if (r_TStripVertices.Count == 0)
+                    {
+                         initOneColorTStripVertices();
+                    }
+
+                    genTListVerticesFromTStripVertices(k_SideFacesStartIndex, k_SideFacesEndIndex);
+                    genTListVerticesFromTStripVertices(k_TopFaceStartIndex, k_TopFaceEndIndex);
+                    genTListVerticesFromTStripVertices(k_BottomFaceStartIndex, k_BottomFaceEndIndex);
+               }
+
                if(r_TListVertices.Count == 0 && r_TStripVerticesMulColor.Count == 0 && r_TStripVertices.Count == 0)
                {
                     initOneColorTStripVertices();
@@ -259,7 +257,41 @@ namespace A20_Ex04_Daniel_203105572_Dor_206318537.Models
 
           protected override void OnEffectPassDraw(EffectPass i_Pass, GameTime i_GameTime)
           {
-               if(!IsMultipleColorBox)
+               if (IsMultipleColorBox)
+               {
+                    drawMulColorBox();
+               }
+               else
+               {
+                    drawOneColorBox();
+               }
+          }
+
+          private void drawMulColorBox()
+          {
+               if (TriangleDrawType == PrimitiveType.TriangleList)
+               {
+                    this.GraphicsDevice.DrawUserPrimitives<VertexPositionColor>(
+                         TriangleDrawType, r_TListVertices.ToArray(), 0, k_SideFacesTrainglesCount + (2 * k_TopAndBottomTrainglesCount));
+               }
+               else if (TriangleDrawType == PrimitiveType.TriangleStrip)
+               {
+                    for (int i = 0; i < k_FacesInCube; i++)
+                    {
+                         this.GraphicsDevice.DrawUserPrimitives<VertexPositionColor>(
+                              TriangleDrawType, r_TStripVerticesMulColor.ToArray(), i * k_VerticesInOneFace, k_TrianglesInOneFace);
+                    }
+               }
+          }
+
+          private void drawOneColorBox()
+          {
+               if (TriangleDrawType == PrimitiveType.TriangleList)
+               {
+                    this.GraphicsDevice.DrawUserPrimitives<VertexPositionColor>(
+                         TriangleDrawType, r_TListVertices.ToArray(), 0, k_SideFacesTrainglesCount + (2 * k_TopAndBottomTrainglesCount));
+               }
+               else if (TriangleDrawType == PrimitiveType.TriangleStrip)
                {
                     this.GraphicsDevice.DrawUserPrimitives<VertexPositionColor>(
                          TriangleDrawType, r_TStripVertices.ToArray(), k_SideFacesStartIndex, k_SideFacesTrainglesCount);
@@ -267,19 +299,6 @@ namespace A20_Ex04_Daniel_203105572_Dor_206318537.Models
                          TriangleDrawType, r_TStripVertices.ToArray(), k_TopFaceStartIndex, k_TopAndBottomTrainglesCount);
                     this.GraphicsDevice.DrawUserPrimitives<VertexPositionColor>(
                          TriangleDrawType, r_TStripVertices.ToArray(), k_BottomFaceStartIndex, k_TopAndBottomTrainglesCount);
-               }
-               else if (TriangleDrawType == PrimitiveType.TriangleList)
-               {
-                    this.GraphicsDevice.DrawUserPrimitives<VertexPositionColor>(
-                             TriangleDrawType, r_TListVertices.ToArray(), 0, k_SideFacesTrainglesCount + (2 * k_TopAndBottomTrainglesCount));
-               }
-               else if (TriangleDrawType == PrimitiveType.TriangleStrip)
-               {
-                    for(int i = 0; i < k_FacesInCube; i++)
-                    {
-                         this.GraphicsDevice.DrawUserPrimitives<VertexPositionColor>(
-                              TriangleDrawType, r_TStripVerticesMulColor.ToArray(), i * k_VerticesInOneFace, k_TrianglesInOneFace);
-                    }
                }
           }
      }
