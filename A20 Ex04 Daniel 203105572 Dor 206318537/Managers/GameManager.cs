@@ -10,22 +10,25 @@ namespace A20_Ex04_Daniel_203105572_Dor_206318537.Managers
 {
      public class GameManager : RegisteredComponent
      {
-          private const string k_Title = @"Score: {0}   Bet: {1}";
-          private const int k_DreidelsCount = 6;
-          private const int k_LetterCount = 4;
+          private const string k_Title                                  = @"Score: {0}   Bet: {1}";
+          private const int k_DreidelsCount                             = 6;
+          private const int k_LetterCount                               = 4;
+          private const int k_MinVelocity                               = 10;
+          private const int k_MaxVelocity                               = 25;
+          private readonly List<eDreidelLetter> r_DreidelsRandomLetters = new List<eDreidelLetter>(k_DreidelsCount);
+          private readonly List<float> r_DreidelsDistancesToEndPoint    = new List<float>(k_DreidelsCount);
+          private readonly List<float> r_DreidelsInitialVelocity        = new List<float>(k_DreidelsCount);
+          private readonly List<bool> r_DreidelsStopped                 = new List<bool>(k_DreidelsCount);
+          private readonly List<float> r_DreidelsInitialRotation        = new List<float>(k_DreidelsCount);
+          private eDreidelLetter m_Bet                                  = eDreidelLetter.None;
+          private bool m_TakeBet                                        = true;
+          private bool m_IsSpinning                                     = false;
           private readonly IInputManager r_InputManager;
           private readonly IRandomBehavior r_RandomBehavior;
-          private readonly List<eDreidelLetter> r_DreidelsRandomLetters = new List<eDreidelLetter>(k_DreidelsCount);
-          private bool m_TakeBet = true;
-          private bool m_IsSpinning = false;
           private int m_Score;
           private int m_DreidelStoppedCount;
-          private eDreidelLetter m_Bet = eDreidelLetter.None;
           private string m_BetStr;
-          private List<float> m_DreidelsDistancesToEndPoint = new List<float>(k_DreidelsCount);
-          private List<float> m_DreidelsInitialVelocity = new List<float>(k_DreidelsCount);
-          private List<bool> m_DreidelsStopped = new List<bool>(k_DreidelsCount);
-          private List<float> m_DreidelsInitialRotation = new List<float>(k_DreidelsCount);
+
 
           public GameManager(Game i_Game)
                : base(i_Game, int.MaxValue)
@@ -48,19 +51,24 @@ namespace A20_Ex04_Daniel_203105572_Dor_206318537.Managers
                     {
                          spinDreidels();
 
-                         if (m_DreidelStoppedCount == 6)
+                         if (m_DreidelStoppedCount == k_DreidelsCount)
                          {
-                              updateScore();
-                              m_DreidelStoppedCount = 0;
-                              m_IsSpinning = false;
-                              m_TakeBet = true;
-                              m_Bet = eDreidelLetter.None;
-                              m_BetStr = string.Empty;
+                              startNewBet();
                          }
                     }
                }
 
                base.Update(i_GameTime);
+          }
+
+          private void startNewBet()
+          {
+               updateScore();
+               m_DreidelStoppedCount = 0;
+               m_IsSpinning = false;
+               m_TakeBet = true;
+               m_Bet = eDreidelLetter.None;
+               m_BetStr = string.Empty;
           }
 
           private void updateScore()
@@ -94,17 +102,39 @@ namespace A20_Ex04_Daniel_203105572_Dor_206318537.Managers
           private void restartSpin()
           {
                Composite3D world = (this.Game as BaseGame).World;
+               int current = 0;
 
-               for (int i = 0; i < m_DreidelsStopped.Count; i++)
+               foreach(Object3D component in world)
                {
-                    Composite3D dreidel = world[i] as Composite3D;
+                    if (r_DreidelsStopped.Count < current + 1)
+                    {
+                         break;
+                    }
 
-                    m_DreidelsStopped[i] = false;
-                    m_DreidelsDistancesToEndPoint[i] = generateRandomDistanceLength(i);
-                    m_DreidelsInitialVelocity[i] = (float)r_RandomBehavior.GetRandomDoubleNumber(10, 25);
-                    dreidel.AngularVelocity = new Vector3(0, m_DreidelsInitialVelocity[i], 0);
-                    m_DreidelsInitialRotation[i] = dreidel.Rotations.Y;
+                    if(component is Dreidel)
+                    {
+                         resetDreidel(component, current);
+                         current++;
+                    }
                }
+          }
+
+          private void resetDreidel(Object3D i_Dreidel, int i_DreidelIndex)
+          {
+               r_DreidelsStopped[i_DreidelIndex] = false;
+               r_DreidelsDistancesToEndPoint[i_DreidelIndex] = generateRandomDistanceLength(i_DreidelIndex);
+               r_DreidelsInitialVelocity[i_DreidelIndex] = (float)r_RandomBehavior.GetRandomDoubleNumber(k_MinVelocity, k_MaxVelocity);
+               i_Dreidel.AngularVelocity = new Vector3(0, r_DreidelsInitialVelocity[i_DreidelIndex], 0);
+               r_DreidelsInitialRotation[i_DreidelIndex] = i_Dreidel.Rotations.Y;
+          }
+
+          private void addAndInitDreidel(Object3D i_Dreidel, int i_DreidelIndex)
+          {
+               r_DreidelsStopped.Add(false);
+               r_DreidelsInitialRotation.Add(i_Dreidel.Rotations.Y);
+               r_DreidelsDistancesToEndPoint.Add(generateRandomDistanceLength(i_DreidelIndex));
+               r_DreidelsInitialVelocity.Add((float)r_RandomBehavior.GetRandomDoubleNumber(k_MinVelocity, k_MaxVelocity));
+               i_Dreidel.AngularVelocity = new Vector3(0, r_DreidelsInitialVelocity[i_DreidelIndex], 0);
           }
 
           private void spinDreidels()
@@ -116,30 +146,27 @@ namespace A20_Ex04_Daniel_203105572_Dor_206318537.Managers
                {
                     if(component is Dreidel)
                     {
-                         if (m_DreidelsDistancesToEndPoint.Count < current + 1)
+                         if (r_DreidelsDistancesToEndPoint.Count < current + 1)
                          {
-                              m_DreidelsStopped.Add(false);
-                              m_DreidelsInitialRotation.Add(component.Rotations.Y);
-                              m_DreidelsDistancesToEndPoint.Add(generateRandomDistanceLength(current));
-                              m_DreidelsInitialVelocity.Add((float)r_RandomBehavior.GetRandomDoubleNumber(10, 25));
-                              component.AngularVelocity = new Vector3(0, m_DreidelsInitialVelocity[current], 0);
+                              addAndInitDreidel(component, current);
                          }
 
-                         if (!m_DreidelsStopped[current])
+                         if (!r_DreidelsStopped[current])
                          {
                               if (component.AngularVelocity.Y <= 0.2f)
                               {
-                                   if (component.Rotations.Y >= m_DreidelsInitialRotation[current] + m_DreidelsDistancesToEndPoint[current])
+                                   if (component.Rotations.Y >= r_DreidelsInitialRotation[current] + r_DreidelsDistancesToEndPoint[current])
                                    {
                                         component.AngularVelocity = Vector3.Zero;
                                         m_DreidelStoppedCount++;
-                                        m_DreidelsStopped[current] = true;
+                                        r_DreidelsStopped[current] = true;
                                    }
                               }
                               else
                               {
-                                   float percentageToDecrease = 1 - ((component.Rotations.Y - m_DreidelsInitialRotation[current]) / m_DreidelsDistancesToEndPoint[current]);
-                                   component.AngularVelocity = new Vector3(0, m_DreidelsInitialVelocity[current] * percentageToDecrease, 0);
+                                   float completionPercent = (component.Rotations.Y - r_DreidelsInitialRotation[current]) / r_DreidelsDistancesToEndPoint[current];
+                                   float percentageToDecrease = 1 - completionPercent;
+                                   component.AngularVelocity = new Vector3(0, r_DreidelsInitialVelocity[current] * percentageToDecrease, 0);
                               }
                          }
 

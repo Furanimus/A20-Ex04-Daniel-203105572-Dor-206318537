@@ -179,16 +179,7 @@ namespace A20_Ex04_Daniel_203105572_Dor_206318537.Models
           {
                if(UseVertexAndIndexBuffer)
                {
-                    this.GraphicsDevice.Indices = m_IndexBuffer;
-                    this.GraphicsDevice.SetVertexBuffer(m_VertexBuffer);
-
-                    this.GraphicsDevice.DrawIndexedPrimitives(
-                        PrimitiveType.TriangleList,
-                        0, // baseVertex
-                        0, // minVertexIdx
-                        m_VertexBuffer.VertexCount, // num of vertices
-                        0,  // startIdx in the vertexBuffer
-                        6); // num of primitives 
+                    drawWithVertexAndIndexBuffer();
                }
                else if (TriangleDrawType == PrimitiveType.TriangleStrip)
                {
@@ -202,6 +193,20 @@ namespace A20_Ex04_Daniel_203105572_Dor_206318537.Models
                     this.GraphicsDevice.DrawUserPrimitives<VertexPositionColor>(
                               TriangleDrawType, r_TListVertices.ToArray(), 0, 6);
                }
+          }
+
+          private void drawWithVertexAndIndexBuffer()
+          {
+               this.GraphicsDevice.Indices = m_IndexBuffer;
+               this.GraphicsDevice.SetVertexBuffer(m_VertexBuffer);
+
+               this.GraphicsDevice.DrawIndexedPrimitives(
+                   PrimitiveType.TriangleList,
+                   0, // baseVertex
+                   0, // minVertexIdx
+                   m_VertexBuffer.VertexCount, // num of vertices
+                   0,  // startIdx in the vertexBuffer
+                   6); // num of primitives 
           }
      }
 }

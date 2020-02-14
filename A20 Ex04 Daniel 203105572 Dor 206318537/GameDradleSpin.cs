@@ -10,8 +10,8 @@ namespace A20_Ex04_Daniel_203105572_Dor_206318537
 {
      public class GameDradleSpin : BaseGame
      {
+          private const float k_CameraDistanceFromZero = 50;
           private readonly IRandomBehavior r_RandomBehavior;
-
           public GameDradleSpin()
           {
                Content.RootDirectory = "Content";
@@ -21,8 +21,8 @@ namespace A20_Ex04_Daniel_203105572_Dor_206318537
 
           protected override void Initialize()
           {
-               Camera.Position = new Vector3(0, 0, 50);
-               Camera.TargetPosition = new Vector3(0, 0, 0);
+               Camera.Position = new Vector3(0, 0, k_CameraDistanceFromZero);
+               Camera.TargetPosition = Vector3.Zero;
 
                World.AddComponent(new ColorDreidel(this, 1));
                World[0].Position = r_RandomBehavior.GenerateRandomVector3();

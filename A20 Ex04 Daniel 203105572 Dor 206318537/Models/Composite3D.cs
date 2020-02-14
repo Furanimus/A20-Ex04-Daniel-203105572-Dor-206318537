@@ -22,6 +22,11 @@ namespace A20_Ex04_Daniel_203105572_Dor_206318537.Models
           {
           }
 
+          public Composite3D(Game i_Game, params Object3D[] i_Components)
+               : this(i_Game, int.MaxValue, i_Components)
+          {
+          }
+
           public Composite3D(Game i_Game, int i_CallOrder, params Object3D[] i_Components)
                : base(i_Game, i_CallOrder)
           {

@@ -7,15 +7,12 @@ namespace A20_Ex04_Daniel_203105572_Dor_206318537.Utils
 {
      public class RandomBehavior : GameService, IRandomBehavior
      {
-          private const int k_MaxAngularVelocity = 15;
-          private const int k_MinAngularVelocity = 8;
           private const int k_XHighestThreshold = 30;
           private const int k_XLowestThreshold = -30;
           private const int k_YHighestThreshold = 12;
           private const int k_YLowestThreshold = -15;
           private const int k_ZHighestThreshold = 10;
           private const int k_ZLowestThreshold = -50;
-
           private readonly Random r_Random;
           private readonly int r_RandomFactor = 10;
           private readonly int r_RandomMin = 0;

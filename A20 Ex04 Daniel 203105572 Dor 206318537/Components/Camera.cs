@@ -7,7 +7,6 @@ namespace A20_Ex04_Daniel_203105572_Dor_206318537.Components
 {
      public class Camera : GameService, ICamera
      {
-          private static readonly float sr_RotationSpeed = MathHelper.ToRadians(0.2f);
           private Matrix m_ProjectionFieldOfView;
           protected Quaternion m_RotationQuaternion = Quaternion.Identity;
           protected Vector3 m_TargetPosition = Vector3.Zero;

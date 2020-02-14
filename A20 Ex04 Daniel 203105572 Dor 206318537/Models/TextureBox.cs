@@ -10,9 +10,9 @@ namespace A20_Ex04_Daniel_203105572_Dor_206318537.Models
           private const int k_VerticesInOneFace = 4;
           private const int k_TrianglesInOneFace = 2;
           private const int k_TrianglesCountInListPrimitiveType = 12;
-          private readonly List<VertexPositionTexture> r_TListVertices = new List<VertexPositionTexture>();
-          private readonly List<VertexPositionTexture> r_TStripVertices = new List<VertexPositionTexture>();
-          private string m_SidesTextureAssetName;
+          private const int k_TStripSize = 24;
+          private readonly string r_SidesTextureAssetName;
+          private List<VertexPositionTexture> m_TStripVertices;
           private VertexBuffer m_VertexBuffer;
           private List<short> m_Indices;
           private IndexBuffer m_IndexBuffer;
@@ -20,7 +20,7 @@ namespace A20_Ex04_Daniel_203105572_Dor_206318537.Models
           public TextureBox(Game i_Game, int i_CallOrder, string i_SidesTexture)
                : base(i_Game, i_CallOrder)
           {
-               m_SidesTextureAssetName = i_SidesTexture;
+               r_SidesTextureAssetName = i_SidesTexture;
                Width = Height = Depth = 5;
           }
 
@@ -39,16 +39,13 @@ namespace A20_Ex04_Daniel_203105572_Dor_206318537.Models
           {
                base.Initialize();
 
+               initTStripVertices();
+
                if (UseVertexAndIndexBuffer)
                {
-                    initTStripVertices();
                     initVertexAndIndexBuffer();
                }
 
-               if (r_TListVertices.Count == 0 && r_TStripVertices.Count == 0)
-               {
-                    initTStripVertices();
-               }
           }
 
           public bool UseVertexAndIndexBuffer { get; set; }
@@ -68,10 +65,10 @@ namespace A20_Ex04_Daniel_203105572_Dor_206318537.Models
                m_VertexBuffer = new VertexBuffer(
                    this.GraphicsDevice,
                    typeof(VertexPositionTexture),
-                   r_TStripVertices.Count,
+                   m_TStripVertices.Count,
                    BufferUsage.WriteOnly);
 
-               m_VertexBuffer.SetData<VertexPositionTexture>(r_TStripVertices.ToArray(), 0, r_TStripVertices.Count);
+               m_VertexBuffer.SetData<VertexPositionTexture>(m_TStripVertices.ToArray(), 0, m_TStripVertices.Count);
 
                m_IndexBuffer = new IndexBuffer(
                    this.GraphicsDevice,
@@ -86,7 +83,7 @@ namespace A20_Ex04_Daniel_203105572_Dor_206318537.Models
           {
                base.LoadContent();
 
-               SidesTexture = this.Game.Content.Load<Texture2D>(m_SidesTextureAssetName);
+               SidesTexture = this.Game.Content.Load<Texture2D>(r_SidesTextureAssetName);
                this.BasicEffect = new BasicEffect(this.Game.GraphicsDevice);
                this.BasicEffect.VertexColorEnabled = false;
                this.BasicEffect.Texture = this.SidesTexture;
@@ -98,6 +95,11 @@ namespace A20_Ex04_Daniel_203105572_Dor_206318537.Models
                float distanceX = Width / 2;
                float distanceY = Height / 2;
                float distanceZ = Depth / 2;
+               
+               if(m_TStripVertices == null)
+               {
+                    m_TStripVertices = new List<VertexPositionTexture>(k_TStripSize);
+               }
 
                addFrontVertices(distanceX, distanceY, distanceZ);
                addRightVertices(distanceX, distanceY, distanceZ);
@@ -109,50 +111,50 @@ namespace A20_Ex04_Daniel_203105572_Dor_206318537.Models
 
           private void addFrontVertices(float i_DistanceX, float i_DistanceY, float i_DistanceZ)
           {
-               r_TStripVertices.Add(new VertexPositionTexture(new Vector3(-i_DistanceX + ModelCenter.X, -i_DistanceY + ModelCenter.Y, i_DistanceZ + ModelCenter.Z), new Vector2(0, 1)));
-               r_TStripVertices.Add(new VertexPositionTexture(new Vector3(-i_DistanceX + ModelCenter.X, i_DistanceY + ModelCenter.Y, i_DistanceZ + ModelCenter.Z), new Vector2(0, 0)));
-               r_TStripVertices.Add(new VertexPositionTexture(new Vector3(i_DistanceX + ModelCenter.X, -i_DistanceY + ModelCenter.Y, i_DistanceZ + ModelCenter.Z), new Vector2(0.20f, 1)));
-               r_TStripVertices.Add(new VertexPositionTexture(new Vector3(i_DistanceX + ModelCenter.X, i_DistanceY + ModelCenter.Y, i_DistanceZ + ModelCenter.Z), new Vector2(0.20f, 0)));
+               m_TStripVertices.Add(new VertexPositionTexture(new Vector3(-i_DistanceX + ModelCenter.X, -i_DistanceY + ModelCenter.Y, i_DistanceZ + ModelCenter.Z), new Vector2(0, 1)));
+               m_TStripVertices.Add(new VertexPositionTexture(new Vector3(-i_DistanceX + ModelCenter.X, i_DistanceY + ModelCenter.Y, i_DistanceZ + ModelCenter.Z), new Vector2(0, 0)));
+               m_TStripVertices.Add(new VertexPositionTexture(new Vector3(i_DistanceX + ModelCenter.X, -i_DistanceY + ModelCenter.Y, i_DistanceZ + ModelCenter.Z), new Vector2(0.20f, 1)));
+               m_TStripVertices.Add(new VertexPositionTexture(new Vector3(i_DistanceX + ModelCenter.X, i_DistanceY + ModelCenter.Y, i_DistanceZ + ModelCenter.Z), new Vector2(0.20f, 0)));
           }
 
           private void addRightVertices(float i_DistanceX, float i_DistanceY, float i_DistanceZ)
           {
-               r_TStripVertices.Add(new VertexPositionTexture(r_TStripVertices[2].Position, new Vector2(0.20f, 1)));
-               r_TStripVertices.Add(new VertexPositionTexture(r_TStripVertices[3].Position, new Vector2(0.20f, 0)));
-               r_TStripVertices.Add(new VertexPositionTexture(new Vector3(i_DistanceX + ModelCenter.X, -i_DistanceY + ModelCenter.Y, -i_DistanceZ + ModelCenter.Z), new Vector2(0.4f, 1)));
-               r_TStripVertices.Add(new VertexPositionTexture(new Vector3(i_DistanceX + ModelCenter.X, i_DistanceY + ModelCenter.Y, -i_DistanceZ + ModelCenter.Z), new Vector2(0.4f, 0)));
+               m_TStripVertices.Add(new VertexPositionTexture(m_TStripVertices[2].Position, new Vector2(0.20f, 1)));
+               m_TStripVertices.Add(new VertexPositionTexture(m_TStripVertices[3].Position, new Vector2(0.20f, 0)));
+               m_TStripVertices.Add(new VertexPositionTexture(new Vector3(i_DistanceX + ModelCenter.X, -i_DistanceY + ModelCenter.Y, -i_DistanceZ + ModelCenter.Z), new Vector2(0.4f, 1)));
+               m_TStripVertices.Add(new VertexPositionTexture(new Vector3(i_DistanceX + ModelCenter.X, i_DistanceY + ModelCenter.Y, -i_DistanceZ + ModelCenter.Z), new Vector2(0.4f, 0)));
           }
 
           private void addBackVertices(float i_DistanceX, float i_DistanceY, float i_DistanceZ)
           {
-               r_TStripVertices.Add(new VertexPositionTexture(r_TStripVertices[6].Position, new Vector2(0.4f, 1)));
-               r_TStripVertices.Add(new VertexPositionTexture(r_TStripVertices[7].Position, new Vector2(0.4f, 0)));
-               r_TStripVertices.Add(new VertexPositionTexture(new Vector3(-i_DistanceX + ModelCenter.X, -i_DistanceY + ModelCenter.Y, -i_DistanceZ + ModelCenter.Z), new Vector2(0.60f, 1)));
-               r_TStripVertices.Add(new VertexPositionTexture(new Vector3(-i_DistanceX + ModelCenter.X, i_DistanceY + ModelCenter.Y, -i_DistanceZ + ModelCenter.Z), new Vector2(0.60f, 0)));
+               m_TStripVertices.Add(new VertexPositionTexture(m_TStripVertices[6].Position, new Vector2(0.4f, 1)));
+               m_TStripVertices.Add(new VertexPositionTexture(m_TStripVertices[7].Position, new Vector2(0.4f, 0)));
+               m_TStripVertices.Add(new VertexPositionTexture(new Vector3(-i_DistanceX + ModelCenter.X, -i_DistanceY + ModelCenter.Y, -i_DistanceZ + ModelCenter.Z), new Vector2(0.60f, 1)));
+               m_TStripVertices.Add(new VertexPositionTexture(new Vector3(-i_DistanceX + ModelCenter.X, i_DistanceY + ModelCenter.Y, -i_DistanceZ + ModelCenter.Z), new Vector2(0.60f, 0)));
           }
 
           private void addLeftVertices(float i_DistanceX, float i_DistanceY, float i_DistanceZ)
           {
-               r_TStripVertices.Add(new VertexPositionTexture(r_TStripVertices[10].Position, new Vector2(0.60f, 1)));
-               r_TStripVertices.Add(new VertexPositionTexture(r_TStripVertices[11].Position, new Vector2(0.60f, 0)));
-               r_TStripVertices.Add(new VertexPositionTexture(new Vector3(-i_DistanceX + ModelCenter.X, -i_DistanceY + ModelCenter.Y, i_DistanceZ + ModelCenter.Z), new Vector2(0.8f, 1)));
-               r_TStripVertices.Add(new VertexPositionTexture(new Vector3(-i_DistanceX + ModelCenter.X, i_DistanceY + ModelCenter.Y, i_DistanceZ + ModelCenter.Z), new Vector2(0.8f, 0)));
+               m_TStripVertices.Add(new VertexPositionTexture(m_TStripVertices[10].Position, new Vector2(0.60f, 1)));
+               m_TStripVertices.Add(new VertexPositionTexture(m_TStripVertices[11].Position, new Vector2(0.60f, 0)));
+               m_TStripVertices.Add(new VertexPositionTexture(new Vector3(-i_DistanceX + ModelCenter.X, -i_DistanceY + ModelCenter.Y, i_DistanceZ + ModelCenter.Z), new Vector2(0.8f, 1)));
+               m_TStripVertices.Add(new VertexPositionTexture(new Vector3(-i_DistanceX + ModelCenter.X, i_DistanceY + ModelCenter.Y, i_DistanceZ + ModelCenter.Z), new Vector2(0.8f, 0)));
           }
 
           private void addTopVertices(float i_DistanceX, float i_DistanceY, float i_DistanceZ)
           {
-               r_TStripVertices.Add(new VertexPositionTexture(r_TStripVertices[0].Position, new Vector2(0.8f, 0)));
-               r_TStripVertices.Add(new VertexPositionTexture(r_TStripVertices[10].Position, new Vector2(0.8f, 1)));
-               r_TStripVertices.Add(new VertexPositionTexture(r_TStripVertices[2].Position, new Vector2(1, 0)));
-               r_TStripVertices.Add(new VertexPositionTexture(r_TStripVertices[6].Position, new Vector2(1, 1)));
+               m_TStripVertices.Add(new VertexPositionTexture(m_TStripVertices[0].Position, new Vector2(0.8f, 0)));
+               m_TStripVertices.Add(new VertexPositionTexture(m_TStripVertices[10].Position, new Vector2(0.8f, 1)));
+               m_TStripVertices.Add(new VertexPositionTexture(m_TStripVertices[2].Position, new Vector2(1, 0)));
+               m_TStripVertices.Add(new VertexPositionTexture(m_TStripVertices[6].Position, new Vector2(1, 1)));
           }
 
           private void addBottomVertices(float i_DistanceX, float i_DistanceY, float i_DistanceZ)
           {
-               r_TStripVertices.Add(new VertexPositionTexture(r_TStripVertices[1].Position, new Vector2(0.8f, 0)));
-               r_TStripVertices.Add(new VertexPositionTexture(r_TStripVertices[11].Position, new Vector2(0.8f, 1)));
-               r_TStripVertices.Add(new VertexPositionTexture(r_TStripVertices[3].Position, new Vector2(1, 0)));
-               r_TStripVertices.Add(new VertexPositionTexture(r_TStripVertices[7].Position, new Vector2(1, 1)));
+               m_TStripVertices.Add(new VertexPositionTexture(m_TStripVertices[1].Position, new Vector2(0.8f, 0)));
+               m_TStripVertices.Add(new VertexPositionTexture(m_TStripVertices[11].Position, new Vector2(0.8f, 1)));
+               m_TStripVertices.Add(new VertexPositionTexture(m_TStripVertices[3].Position, new Vector2(1, 0)));
+               m_TStripVertices.Add(new VertexPositionTexture(m_TStripVertices[7].Position, new Vector2(1, 1)));
           }
 
           protected override void OnEffectPassDraw(EffectPass i_Pass, GameTime i_GameTime)
@@ -166,7 +168,7 @@ namespace A20_Ex04_Daniel_203105572_Dor_206318537.Models
                     for (int i = 0; i < k_FacesInCube; i++)
                     {
                          this.GraphicsDevice.DrawUserPrimitives<VertexPositionTexture>(
-                              PrimitiveType.TriangleStrip, r_TStripVertices.ToArray(), i * k_VerticesInOneFace, k_TrianglesInOneFace);
+                              PrimitiveType.TriangleStrip, m_TStripVertices.ToArray(), i * k_VerticesInOneFace, k_TrianglesInOneFace);
                     }
                }
           }

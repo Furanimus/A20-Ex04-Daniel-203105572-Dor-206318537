@@ -6,7 +6,7 @@ namespace A20_Ex04_Daniel_203105572_Dor_206318537.Models
      public class BufferAndIndexDreidel : Dreidel
      {
           private const string k_AssetName = @"Sprites\NGHP";
-          private readonly Vector3 r_HolderModelCenter = new Vector3(0, 2.5f, 0);
+          private readonly Vector3 r_ModelCenter = new Vector3(0, 2.5f, 0);
 
           public BufferAndIndexDreidel(Game i_Game)
                : this(i_Game, int.MaxValue)
@@ -24,7 +24,7 @@ namespace A20_Ex04_Daniel_203105572_Dor_206318537.Models
 
           public override void Initialize()
           {
-               this.Base.ModelCenter = new Vector3(0, 2.5f, 0);
+               this.Base.ModelCenter = r_ModelCenter;
                this.Base.IsYFlip = true;
                this.Base.Color = Color.Gray;
                this.Base.UseVertexAndIndexBuffer = true;
@@ -33,7 +33,8 @@ namespace A20_Ex04_Daniel_203105572_Dor_206318537.Models
 
                (this.Body as TextureBox).UseVertexAndIndexBuffer = true;
 
-               this.Holder.ModelCenter = r_HolderModelCenter;
+               this.Holder.UseVertexAndIndexBuffer = true;
+               this.Holder.ModelCenter = r_ModelCenter;
                this.Holder.Color = Color.Red;
                this.Holder.Depth = this.Holder.Width = 1;
                this.Holder.Height = 4;

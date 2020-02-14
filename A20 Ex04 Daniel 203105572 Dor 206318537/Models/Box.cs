@@ -4,10 +4,12 @@ namespace A20_Ex04_Daniel_203105572_Dor_206318537.Models
 {
      public class Box : Object3D
      {
+          private const int k_InitialDimension = 5;
+
           public Box(Game i_Game, int i_CallOrder)
                : base(i_Game, i_CallOrder)
           {
-               Width = Height = Depth = 5;
+               Width = Height = Depth = k_InitialDimension;
           }
 
           public Box(Game i_Game)

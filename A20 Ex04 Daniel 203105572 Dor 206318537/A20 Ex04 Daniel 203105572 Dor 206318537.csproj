@@ -49,7 +49,6 @@
     <Compile Include="GameDradleSpin.cs" />
     <Compile Include="Interfaces\IInputManager.cs" />
     <Compile Include="Interfaces\IRandomBehavior.cs" />
-    <Compile Include="Managers\CameraManager.cs" />
     <Compile Include="Managers\GameManager.cs" />
     <Compile Include="Managers\InputManager.cs" />
     <Compile Include="Models\Box.cs" />
