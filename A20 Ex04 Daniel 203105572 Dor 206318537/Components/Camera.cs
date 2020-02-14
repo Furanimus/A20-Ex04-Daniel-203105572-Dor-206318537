@@ -1,7 +1,7 @@
-﻿using A20_Ex04_Daniel_203105572_Dor_206318537.Interfaces;
+﻿using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
-using System;
+using A20_Ex04_Daniel_203105572_Dor_206318537.Interfaces;
 
 namespace A20_Ex04_Daniel_203105572_Dor_206318537.Components
 {
@@ -68,8 +68,8 @@ namespace A20_Ex04_Daniel_203105572_Dor_206318537.Components
                     }
 
                     return m_TargetPosition;
-
                }
+
                set
                {
                     if (m_TargetPosition != value)
@@ -86,6 +86,7 @@ namespace A20_Ex04_Daniel_203105572_Dor_206318537.Components
                {
                     return m_Rotations;
                }
+
                set
                {
                     if (m_Rotations != value)
@@ -109,6 +110,7 @@ namespace A20_Ex04_Daniel_203105572_Dor_206318537.Components
 
                     return m_RotationQuaternion;
                }
+
                set
                {
                     if (m_RotationQuaternion != value)
@@ -118,7 +120,6 @@ namespace A20_Ex04_Daniel_203105572_Dor_206318537.Components
                     }
                }
           }
-
 
           public Vector3 Position
           {
@@ -196,7 +197,6 @@ namespace A20_Ex04_Daniel_203105572_Dor_206318537.Components
                }
           }
 
-
           public override void Update(GameTime gameTime)
           {
                UpdateByInput();
@@ -217,30 +217,28 @@ namespace A20_Ex04_Daniel_203105572_Dor_206318537.Components
                {
                     movementScale *= 10;
                }
+
                if (keyboardState.IsKeyDown(Keys.LeftControl))
                {
                     movementScale *= 100;
                }
-               // forward:
+
                if (keyboardState.IsKeyDown(Keys.Up))
                {
                     m_Position -= movementScale * Vector3.Transform(Vector3.UnitZ / 10, RotationQuaternion);
                     ShouldUpdateViewMatrix = true;
                }
-               // backwords:
                else if (keyboardState.IsKeyDown(Keys.Down))
                {
                     m_Position += movementScale * Vector3.Transform(Vector3.UnitZ / 10, RotationQuaternion);
                     ShouldUpdateViewMatrix = true;
                }
 
-               // strafe left:
                if (keyboardState.IsKeyDown(Keys.Left))
                {
                     m_Position -= movementScale * Vector3.Transform(Vector3.UnitX / 2, RotationQuaternion);
                     ShouldUpdateViewMatrix = true;
                }
-               // strafe right:
                else if (keyboardState.IsKeyDown(Keys.Right))
                {
                     m_Position += movementScale * Vector3.Transform(Vector3.UnitX / 2, RotationQuaternion);

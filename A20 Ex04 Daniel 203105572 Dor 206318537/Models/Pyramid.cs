@@ -1,10 +1,6 @@
-﻿using Microsoft.Xna.Framework;
+﻿using System.Collections.Generic;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace A20_Ex04_Daniel_203105572_Dor_206318537.Models
 {
@@ -16,7 +12,7 @@ namespace A20_Ex04_Daniel_203105572_Dor_206318537.Models
           private List<short> m_Indices;
           private IndexBuffer m_IndexBuffer;
 
-          public Pyramid (Game i_Game, int i_CallOrder)
+          public Pyramid(Game i_Game, int i_CallOrder)
                : base(i_Game, i_CallOrder)
           {
                r_TStripVertices.Capacity = 10;

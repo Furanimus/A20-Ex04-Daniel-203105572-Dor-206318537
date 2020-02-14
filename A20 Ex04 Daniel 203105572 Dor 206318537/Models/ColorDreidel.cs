@@ -1,6 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using System.Collections.Generic;
 
 namespace A20_Ex04_Daniel_203105572_Dor_206318537.Models
 {
@@ -25,8 +24,7 @@ namespace A20_Ex04_Daniel_203105572_Dor_206318537.Models
                     1,
                     new Rectangle3D(2, 0.8f, new Vector3(0.5f, 1.3f, 2.52f), this.Game),
                     new Rectangle3D(1, 3, new Vector3(1, 0.2f, 2.52f), this.Game),
-                    new Rectangle3D(3f, 0.8f, new Vector3(0, -1.3f, 2.52f), this.Game)
-               );
+                    new Rectangle3D(3f, 0.8f, new Vector3(0, -1.3f, 2.52f), this.Game));
 
                r_GimelLetter = new Composite3D(
                     this.Game,
@@ -34,16 +32,14 @@ namespace A20_Ex04_Daniel_203105572_Dor_206318537.Models
                     new Rectangle3D(2.5f, 0.8f, new Vector3(0.5f, 1.3f, 2.52f), this.Game),
                     new Rectangle3D(1, 3, new Vector3(1.5f, 0, 2.52f), this.Game),
                     new Rectangle3D(2f, 0.8f, new Vector3(0, 0, 2.52f), this.Game),
-                    new Rectangle3D(1f, 1.5f, new Vector3(-0.8f, -0.6f, 2.52f), this.Game)
-               );
+                    new Rectangle3D(1f, 1.5f, new Vector3(-0.8f, -0.6f, 2.52f), this.Game));
 
                r_HeLetter = new Composite3D(
                     this.Game,
                     1,
                     new Rectangle3D(2.5f, 0.8f, new Vector3(0f, 1.3f, 2.52f), this.Game),
                     new Rectangle3D(1, 3, new Vector3(1f, 0, 2.52f), this.Game),
-                    new Rectangle3D(1f, 1.5f, new Vector3(-0.8f, -0.6f, 2.52f), this.Game)
-               );
+                    new Rectangle3D(1f, 1.5f, new Vector3(-0.8f, -0.6f, 2.52f), this.Game));
 
                r_PeLetter = new Composite3D(
                     this.Game,
@@ -52,8 +48,7 @@ namespace A20_Ex04_Daniel_203105572_Dor_206318537.Models
                     new Rectangle3D(1, 3, new Vector3(1, 0.2f, 2.52f), this.Game),
                     new Rectangle3D(3f, 0.8f, new Vector3(0, -1.3f, 2.52f), this.Game),
                     new Rectangle3D(1f, 1.5f, new Vector3(-1f, -0.6f, 2.52f), this.Game),
-                    new Rectangle3D(1.5f, 0.7f, new Vector3(-0.7f, 0f, 2.52f), this.Game)
-               );
+                    new Rectangle3D(1.5f, 0.7f, new Vector3(-0.7f, 0f, 2.52f), this.Game));
 
                AddComponent(Base);
                AddComponent(Holder);

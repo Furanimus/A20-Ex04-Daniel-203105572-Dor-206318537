@@ -1,11 +1,10 @@
-﻿using A20_Ex04_Daniel_203105572_Dor_206318537.Components;
+﻿using System.Collections.Generic;
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Input;
+using A20_Ex04_Daniel_203105572_Dor_206318537.Components;
 using A20_Ex04_Daniel_203105572_Dor_206318537.Interfaces;
 using A20_Ex04_Daniel_203105572_Dor_206318537.Models;
 using A20_Ex04_Daniel_203105572_Dor_206318537.Utils;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Input;
-using System;
-using System.Collections.Generic;
 
 namespace A20_Ex04_Daniel_203105572_Dor_206318537.Managers
 {

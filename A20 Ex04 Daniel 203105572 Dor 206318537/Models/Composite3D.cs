@@ -1,11 +1,8 @@
-﻿using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using System;
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 
 namespace A20_Ex04_Daniel_203105572_Dor_206318537.Models
 {
@@ -215,6 +212,7 @@ namespace A20_Ex04_Daniel_203105572_Dor_206318537.Models
                {
                     return m_Rotations;
                }
+
                set
                {
                     m_Rotations = value;
@@ -225,7 +223,6 @@ namespace A20_Ex04_Daniel_203105572_Dor_206318537.Models
                     }
                }
           }
-
 
           public void AddComponent(Object3D i_Component)
           {
@@ -275,7 +272,6 @@ namespace A20_Ex04_Daniel_203105572_Dor_206318537.Models
           public object SyncRoot => null;
 
           public bool IsSynchronized => false;
-
 
           public void CopyTo(Array i_Array, int i_Index)
           {

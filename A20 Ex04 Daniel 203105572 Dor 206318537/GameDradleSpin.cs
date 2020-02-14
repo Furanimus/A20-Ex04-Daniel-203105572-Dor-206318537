@@ -1,12 +1,10 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-using A20_Ex04_Daniel_203105572_Dor_206318537.Components;
 using A20_Ex04_Daniel_203105572_Dor_206318537.Interfaces;
 using A20_Ex04_Daniel_203105572_Dor_206318537.Managers;
 using A20_Ex04_Daniel_203105572_Dor_206318537.Models;
 using A20_Ex04_Daniel_203105572_Dor_206318537.Utils;
-using System.Collections.Generic;
 
 namespace A20_Ex04_Daniel_203105572_Dor_206318537
 {
@@ -50,7 +48,9 @@ namespace A20_Ex04_Daniel_203105572_Dor_206318537
           protected override void Update(GameTime i_GameTime)
           {
                if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
+               {
                     Exit();
+               }
 
                base.Update(i_GameTime);
           }

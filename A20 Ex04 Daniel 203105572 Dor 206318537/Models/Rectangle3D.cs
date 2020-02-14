@@ -1,10 +1,6 @@
-﻿using Microsoft.Xna.Framework;
+﻿using System.Collections.Generic;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace A20_Ex04_Daniel_203105572_Dor_206318537.Models
 {
@@ -50,7 +46,7 @@ namespace A20_Ex04_Daniel_203105572_Dor_206318537.Models
 
           public override void Initialize()
           {
-               if(!m_IsDrawTypeSet || m_IsDrawTypeSet && m_TriangleDrawType == PrimitiveType.TriangleStrip)
+               if(!m_IsDrawTypeSet || (m_IsDrawTypeSet && m_TriangleDrawType == PrimitiveType.TriangleStrip))
                {
                     TriangleDrawType = PrimitiveType.TriangleStrip;
                     initTStripVertices();

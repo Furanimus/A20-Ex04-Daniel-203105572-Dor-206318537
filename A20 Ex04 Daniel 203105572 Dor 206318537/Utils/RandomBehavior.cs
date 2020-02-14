@@ -97,8 +97,7 @@ namespace A20_Ex04_Daniel_203105572_Dor_206318537.Utils
                return new Vector3(
                     GetRandomIntegerNumber(k_XLowestThreshold, k_XHighestThreshold),
                     GetRandomIntegerNumber(k_YLowestThreshold, k_YHighestThreshold),
-                    GetRandomIntegerNumber(k_ZLowestThreshold, k_ZHighestThreshold)
-                    );
+                    GetRandomIntegerNumber(k_ZLowestThreshold, k_ZHighestThreshold));
           }
      }
 }
